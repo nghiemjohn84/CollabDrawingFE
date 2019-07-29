@@ -29,7 +29,7 @@ public class PaintView extends View {
 
 
     public PaintView(Context context) {
-        this(context,null)
+        this(context,null);
     }
 
     public PaintView(Context context, AttributeSet attrs) {
@@ -56,7 +56,6 @@ public class PaintView extends View {
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
-        normal();
         invalidate();
 
     }
