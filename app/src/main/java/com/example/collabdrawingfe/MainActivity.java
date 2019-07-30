@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.red:
-            paintView.red();
-            return true;
+                paintView.red();
+                return true;
             case R.id.clear:
-            paintView.clear();
-            return true;
+                paintView.clear();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
