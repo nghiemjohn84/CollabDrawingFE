@@ -67,8 +67,7 @@ public class PaintView extends View {
     }
 
     public void eraser() {
-        currentColor = Color.WHITE;
-
+        currentColor = backgroundColor;
     }
 
     @Override
