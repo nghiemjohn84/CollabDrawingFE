@@ -10,4 +10,8 @@
             android:id="@+id/red"
             app:showAsAction="never"
             android:title="Red"/>
+    <item
+            android:id="@+id/eraser"
+            app:showAsAction="never"
+            android:title="Eraser"/>
 </menu>

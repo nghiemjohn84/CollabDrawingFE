@@ -66,6 +66,11 @@ public class PaintView extends View {
 
     }
 
+    public void eraser() {
+        currentColor = Color.WHITE;
+
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();

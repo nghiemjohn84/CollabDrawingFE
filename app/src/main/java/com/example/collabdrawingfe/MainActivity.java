@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.clear:
                 paintView.clear();
                 return true;
+            case R.id.eraser:
+                paintView.eraser();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
