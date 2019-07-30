@@ -12,14 +12,16 @@ import java.util.ArrayList;
 public class PaintView extends View {
 
     public static int BRUSH_SIZE = 20;
-    public static int DEFAULT_COLOR = Color.BLACK;
+    public static final int DEFAULT_COLOR = Color.BLACK;
     public static final int DEFAULT_BG_COLOR = Color.WHITE;
+    private int paintColor = Color.BLACK;
     private static final float TOUCH_TOLERANCE = 4;
     private float mX, mY;
     private Path mPath;
     private Paint mPaint;
     private ArrayList<InputPath> paths = new ArrayList<>();
     private int currentColor;
+    private int previousColor = paintColor;
     private int backgroundColor = DEFAULT_BG_COLOR;
     private int strokeWidth;
     private Bitmap mBitmap;
@@ -37,7 +39,7 @@ public class PaintView extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(DEFAULT_COLOR);
+        mPaint.setColor(paintColor);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -51,12 +53,8 @@ public class PaintView extends View {
         mCanvas = new Canvas(mBitmap);
 
         currentColor = DEFAULT_COLOR;
+        previousColor = currentColor;
         strokeWidth = BRUSH_SIZE;
-    }
-
-    public void red() {
-        currentColor = Color.RED;
-
     }
 
     public void clear() {
@@ -69,6 +67,10 @@ public class PaintView extends View {
     public void eraser() {
         currentColor = backgroundColor;
     }
+    public void brush() {
+        currentColor = DEFAULT_COLOR;
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {

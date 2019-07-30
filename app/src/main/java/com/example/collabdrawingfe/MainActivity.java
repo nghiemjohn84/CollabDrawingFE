@@ -31,15 +31,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.red:
-                paintView.red();
-                return true;
             case R.id.clear:
                 paintView.clear();
                 return true;
             case R.id.eraser:
                 paintView.eraser();
                 return true;
+            case R.id.brush:
+                paintView.brush();
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);

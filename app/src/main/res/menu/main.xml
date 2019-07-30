@@ -2,16 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+            android:id="@+id/brush"
+            app:showAsAction="never"
+            android:title="Brush"/>
     <item
             android:id="@+id/clear"
             app:showAsAction="never"
             android:title="Clear"/>
     <item
-            android:id="@+id/red"
-            app:showAsAction="never"
-            android:title="Red"/>
-    <item
             android:id="@+id/eraser"
             app:showAsAction="never"
             android:title="Eraser"/>
+
+
+
 </menu>
