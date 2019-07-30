@@ -15,16 +15,16 @@ public class PaintView extends View {
     public static final int DEFAULT_COLOR = Color.BLACK;
     public static final int DEFAULT_BG_COLOR = Color.WHITE;
     private static final float TOUCH_TOLERANCE = 4;
-    private float userX, userY;
-    private Path userPath;
-    private Paint userPaint;
-    private ArrayList <InputPath> paths = new ArrayList<>();
+    private float mX, mY;
+    private Path mPath;
+    private Paint mPaint;
+    private ArrayList<InputPath> paths = new ArrayList<>();
     private int currentColor;
     private int backgroundColor = DEFAULT_BG_COLOR;
     private int strokeWidth;
-    private Bitmap userBitmap;
-    private Canvas userCanvas;
-    private Paint userBitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private Bitmap mBitmap;
+    private Canvas mCanvas;
+    private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
 
 
 
@@ -34,25 +34,29 @@ public class PaintView extends View {
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        userPaint = new Paint();
-        userPaint.setAntiAlias(true);
-        userPaint.setDither(true);
-        userPaint.setColor(DEFAULT_COLOR);
-        userPaint.setStyle(Paint.Style.STROKE);
-        userPaint.setStrokeJoin(Paint.Join.ROUND);
-        userPaint.setStrokeCap(Paint.Cap.ROUND);
-        userPaint.setAlpha(255);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(DEFAULT_COLOR);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setAlpha(255);
     }
     public void init(DisplayMetrics metrics) {
         int height = metrics.heightPixels;
         int width = metrics.widthPixels;
 
-        userBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        userCanvas = new Canvas(userBitmap);
+        mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
 
         currentColor = DEFAULT_COLOR;
         strokeWidth = BRUSH_SIZE;
     }
+    public void red() {
+        currentColor = Color.RED;
+    }
+
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
@@ -63,34 +67,40 @@ public class PaintView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        userCanvas.drawColor(backgroundColor);
-        canvas.drawBitmap(userBitmap, 0, 0, userBitmapPaint);
+        mCanvas.drawColor(backgroundColor);
+        for (InputPath ip : paths) {
+            mPaint.setColor(ip.color);
+            mPaint.setStrokeWidth(ip.strokeWidth);
+            mCanvas.drawPath(ip.path, mPaint);
+
+        }
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.restore();
     }
 
     private void inputStart(float x, float y) {
-        userPath = new Path();
-        InputPath ip = new InputPath(currentColor, strokeWidth, userPath);
+        mPath = new Path();
+        InputPath ip = new InputPath(currentColor, strokeWidth, mPath);
         paths.add(ip);
 
-        userPath.reset();
-        userPath.moveTo(x,y);
-        userX = x;
-        userY = y;
+        mPath.reset();
+        mPath.moveTo(x,y);
+        mX = x;
+        mY = y;
     }
 
     private void touching(float x, float y){
-        float dx = Math.abs(x-userX);
-        float dy = Math.abs(x-userY);
+        float dx = Math.abs(x-mX);
+        float dy = Math.abs(x-mY);
 
         if( dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE){
-            userPath.quadTo(userX, userY, (x + userX) / 2, (y + userY) / 2);
-            userX = x;
-            userY = y;
+            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mX = x;
+            mY = y;
         }
     }
     private void notTouching() {
-        userPath.lineTo(userX, userY);
+        mPath.lineTo(mX, mY);
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
