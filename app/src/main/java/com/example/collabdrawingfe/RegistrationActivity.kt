@@ -1,5 +1,6 @@
 package com.example.collabdrawingfe
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,9 @@ class RegistrationActivity : AppCompatActivity() {
 
         already_have_an_account_text_view.setOnClickListener {
             Log.d("RegistrationActivity", "Try to show Log in Activity")
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 }
