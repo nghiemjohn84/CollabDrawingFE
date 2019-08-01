@@ -1,5 +1,6 @@
 package com.example.collabdrawingfe
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -41,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
                     it.isSuccessful -> {
                         Log.d("LoginActivity", "Login successful")
                         Toast.makeText(this, "User logged in successfully", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this, PaintActivity::class.java)
+                        startActivity(intent)
 
                     }
                     else -> {
