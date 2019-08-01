@@ -60,21 +60,6 @@ class RegistrationActivity : AppCompatActivity() {
             select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
         }
     }
-
-    private fun performRegister() {
-        val userName = username_editText_registration.text.toString()
-        val email = email_editText_registration.text.toString()
-        val password = password_editText_registration.text.toString()
-
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter text in email/pw", Toast.LENGTH_SHORT).show()
-            return
-        }
-        Log.d("RegistrationActivity", "Username is: $userName")
-        Log.d("RegistrationActivity", "Email is: $email")
-        Log.d("RegistrationActivity", "Password is: $password")
-    }
-
 //    private fun registerUser(email: String, password: String, username: String) {
 //
 //
