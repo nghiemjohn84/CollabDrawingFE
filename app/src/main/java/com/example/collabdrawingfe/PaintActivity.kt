@@ -7,7 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 
-class MainActivity : AppCompatActivity() {
+class PaintActivity : AppCompatActivity() {
 
     private var paintView: PaintView? = null
 
