@@ -40,6 +40,9 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.brush()
                 return true
             }
+            R.id.invite -> {
+
+            }
         }
 
         return super.onOptionsItemSelected(item)
