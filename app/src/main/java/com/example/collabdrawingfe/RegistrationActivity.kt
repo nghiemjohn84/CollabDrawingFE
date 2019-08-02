@@ -102,7 +102,7 @@ class RegistrationActivity : AppCompatActivity() {
                     clearInputs()
                 }
                 else -> {
-                    Toast.makeText(this, "User Registration failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "User Registration has failed", Toast.LENGTH_LONG).show()
                     return@addOnCompleteListener
                 }
             }
