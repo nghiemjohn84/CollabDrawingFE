@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 
 class PaintActivity : AppCompatActivity() {
@@ -23,7 +22,7 @@ class PaintActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.canvas, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -45,6 +44,13 @@ class PaintActivity : AppCompatActivity() {
                 val activityIntent = Intent(this, InviteCollaboratorActivity::class.java)
                 startActivity(activityIntent)
             }
+
+            R.id.gallery -> {
+                val activityIntent = Intent(this, GalleryActivity::class.java)
+                startActivity(activityIntent)
+
+            }
+
         }
 
         return super.onOptionsItemSelected(item)
