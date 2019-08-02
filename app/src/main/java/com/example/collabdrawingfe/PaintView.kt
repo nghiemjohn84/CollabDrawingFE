@@ -4,8 +4,11 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
 
 import java.util.ArrayList
 
@@ -23,6 +26,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var mCanvas: Canvas? = null
     private val mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
+    private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+
     init {
         mPaint = Paint()
         mPaint.isAntiAlias = true
@@ -34,12 +39,30 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPaint.alpha = 255
     }
 
+    private val instructionsRef = dbFirestore.collection("instructions")
+
+
     fun init(metrics: DisplayMetrics) {
         val height = metrics.heightPixels
         val width = metrics.widthPixels
 
         mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         mCanvas = Canvas(mBitmap!!)
+
+        Log.d("PaintView-mCanvas-init", mCanvas.toString())
+
+
+        val pathdata = HashMap<String,ArrayList<out Any>>()
+
+        instructionsRef.document(mCanvas.toString()).set(pathdata)
+            .addOnSuccessListener { documentReference ->
+                // Toast.makeText(this, "path added to database", Toast.LENGTH_SHORT).show()
+                Log.d("PaintView - onSuccess", paths.toString())
+            }
+            .addOnFailureListener { e ->
+                Log.d("PaintView", "Error adding to database: ", e)
+            }
+
 
         currentColour = DEFAULT_COLOUR
         strokeWidth = BRUSH_SIZE
@@ -68,8 +91,27 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPaint.strokeWidth = ip.strokeWidth.toFloat()
             mCanvas!!.drawPath(ip.path, mPaint)
 
+
         }
+
         canvas.drawBitmap(mBitmap!!, 0f, 0f, mBitmapPaint)
+
+        Log.d("PaintView - paths", mBitmapPaint.toString())
+
+        val pathdata = hashMapOf<String, ArrayList<InputPath>>(
+            "pathname" to paths
+        )
+
+        instructionsRef.document(mCanvas.toString()).set(pathdata)
+            .addOnSuccessListener { documentReference ->
+                // Toast.makeText(this, "path added to database", Toast.LENGTH_SHORT).show()
+                Log.d("PaintView - onDraw", paths.toString())
+            }
+            .addOnFailureListener { e ->
+                Log.d("PaintView - onDraw", "Error adding to database: ", e)
+            }
+
+
         canvas.restore()
     }
 
@@ -104,6 +146,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         val y = event.y
 
         when (event.action) {
+
             MotionEvent.ACTION_DOWN -> {
                 inputStart(x, y)
                 invalidate()
