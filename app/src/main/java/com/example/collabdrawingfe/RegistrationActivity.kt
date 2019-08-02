@@ -26,7 +26,7 @@ class RegistrationActivity : AppCompatActivity() {
 
 
         register_button_registration.setOnClickListener {
-            performRegister()
+            registerUser()
         }
 
         already_have_an_account_text_view.setOnClickListener {
@@ -80,7 +80,7 @@ class RegistrationActivity : AppCompatActivity() {
 //        }
 //    }
 
-    private fun performRegister() {
+    private fun registerUser() {
         val userName = username_editText_registration.text.toString()
         val email = email_editText_registration.text.toString()
         val password = password_editText_registration.text.toString()
