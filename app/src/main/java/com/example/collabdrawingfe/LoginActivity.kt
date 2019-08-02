@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
                     it.isSuccessful -> {
                         Log.d("LoginActivity", "Login successful")
                         Toast.makeText(this, "User logged in successfully", Toast.LENGTH_LONG).show()
-                        val intent = Intent(this, PaintActivity::class.java)
+                        val intent = Intent(this, GalleryActivity::class.java)
                         startActivity(intent)
 
                     }
