@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_gallery.*
 
 class InviteCollaboratorActivity : AppCompatActivity() {
 
@@ -19,12 +20,14 @@ class InviteCollaboratorActivity : AppCompatActivity() {
         val userRef = dbFirestore.collection("users")
         userRef.get()
             .addOnSuccessListener { result ->
-                for(document in result){
-                    Log.d("invite","${document.id} => ${document.data}")
+                for (document in result) {
+                    var username = document.get("username")
+                    Log.d("invite", "$username")
                 }
             }
             .addOnFailureListener { exception ->
                 Log.d("invite","Error getting documents", exception)
             }
+
     }
 }
