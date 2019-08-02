@@ -17,6 +17,7 @@
             android:title="Eraser"/>
     <item android:title="Invite" android:id="@+id/invite" app:showAsAction="ifRoom|withText"
           android:icon="@drawable/ic_supervisor_account_white_24dp"/>
+    <item android:title="Item"/>
 
 
 </menu>
