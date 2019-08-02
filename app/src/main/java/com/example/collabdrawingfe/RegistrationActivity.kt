@@ -60,25 +60,6 @@ class RegistrationActivity : AppCompatActivity() {
             select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
         }
     }
-//    private fun registerUser(email: String, password: String, username: String) {
-//
-//
-//        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-//            when {
-//                it.isSuccessful -> {
-//                    Toast.makeText(this, "User Registered", Toast.LENGTH_LONG).show()
-//                    Log.d("RegisterUser", "Successfully created user with uid ${it.result?.user?.uid}")
-//                    insertUser(email, username, it.result?.user?.uid!!)
-//                    clearInputs()
-//                }
-//                else -> {
-//                    Toast.makeText(this, "User Registration failed", Toast.LENGTH_LONG).show()
-//                    return@addOnCompleteListener
-//                }
-//            }
-//
-//        }
-//    }
 
     private fun registerUser() {
         val userName = username_editText_registration.text.toString()
@@ -108,8 +89,36 @@ class RegistrationActivity : AppCompatActivity() {
             }
 
         }
+        signIn(email, password)
     }
 
+    private fun signIn(email: String, password: String) {
+
+        Log.d("LoginActivity", "signIn ran")
+        Log.d("LoginActivity", "email is: $email")
+        Log.d("LoginActivity", "password is: $password")
+        Log.d("LoginActivity", mAuth.toString())
+
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+            when{
+                it.isSuccessful -> {
+                    Log.d("LoginActivity", "Login successful")
+                    Toast.makeText(this, "User logged in successfully", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, PaintActivity::class.java)
+                    startActivity(intent)
+
+                }
+                else -> {
+                    Log.d("LoginActivity", "Login unsuccessful boyyyyyy :(")
+                    Toast.makeText(this, "Login failed boyyyyyyyyyyy! :(", Toast.LENGTH_LONG).show()
+
+                    return@addOnCompleteListener
+                }
+            }
+
+
+        }
+    }
 
     private fun clearInputs() {
         email_editText_registration.text.clear()
