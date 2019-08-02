@@ -15,9 +15,10 @@
             android:id="@+id/eraser"
             app:showAsAction="never"
             android:title="Eraser"/>
-    <item android:title="Invite" android:id="@+id/invite" app:showAsAction="ifRoom|withText"
+    <item android:title="Invite" android:id="@+id/invite" app:showAsAction="always|withText"
           android:icon="@drawable/ic_supervisor_account_white_24dp"/>
-    <item android:title="Item"/>
+    <item android:title="Gallery" android:id="@+id/gallery" app:showAsAction="always|withText"
+          android:icon="@drawable/ic_photo_library_white_24dp"/>
 
 
 </menu>
