@@ -1,5 +1,6 @@
 package com.example.collabdrawingfe
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -41,7 +42,8 @@ class PaintActivity : AppCompatActivity() {
                 return true
             }
             R.id.invite -> {
-
+                val activityIntent = Intent(this, InviteCollaboratorActivity::class.java)
+                startActivity(activityIntent)
             }
         }
 
