@@ -2,15 +2,20 @@ package com.example.collabdrawingfe
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.text.method.Touch
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 import java.util.ArrayList
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
+
 
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val paintColor = Color.BLACK
@@ -27,6 +32,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private val mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
     private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     init {
         mPaint = Paint()
@@ -39,7 +45,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPaint.alpha = 255
     }
 
-    private val instructionsRef = dbFirestore.collection("instructions")
+ //   private val instructionsRef = dbFirestore.collection("instructions")
 
 
     fun init(metrics: DisplayMetrics) {
@@ -50,23 +56,56 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mCanvas = Canvas(mBitmap!!)
 
         Log.d("PaintView-mCanvas-init", mCanvas.toString())
+//        Log.d("PaintView-mBitmap-init", mBitmap.toString())
 
 
-        val pathdata = HashMap<String,ArrayList<out Any>>()
-
-        instructionsRef.document(mCanvas.toString()).set(pathdata)
-            .addOnSuccessListener { documentReference ->
-                // Toast.makeText(this, "path added to database", Toast.LENGTH_SHORT).show()
-                Log.d("PaintView - onSuccess", paths.toString())
-            }
-            .addOnFailureListener { e ->
-                Log.d("PaintView", "Error adding to database: ", e)
-            }
+//         val pathdata = HashMap<String,ArrayList<out Any>>()
+//
+//        instructionsRef.document(mCanvas.toString()).set(pathdata)
+//            .addOnSuccessListener { documentReference ->
+//                // Toast.makeText(this, "path added to database", Toast.LENGTH_SHORT).show()
+//                Log.d("PaintView - onSuccess", paths.toString())
+//            }
+//            .addOnFailureListener { e ->
+//                Log.d("PaintView", "Error adding to database: ", e)
+//            }
 
 
         currentColour = DEFAULT_COLOUR
         strokeWidth = BRUSH_SIZE
+
+ //       writeToFile(mBitmap)
     }
+
+//    private fun bitmapToDrawable(bitmap:Bitmap):BitmapDrawable{
+//        return BitmapDrawable(resources,bitmap)
+//    }
+
+//    private fun writeToFile(bitmapFile: Bitmap) {
+//
+//        var storageRef = mStorage.reference
+//        var imagesRef: StorageReference? = storageRef.child("images")
+//
+//        val boas = ByteArrayOutputStream()
+//        val drawableBitmap = bitmapToDrawable(bitmapFile)
+//        val bitmapToWrite = drawableBitmap.bitmap
+//
+//        // TODO
+//        //bitmapToWrite.compress(Bitmap.CompressFormat.JPEG, 100, boas)
+//
+//        val f: File = File(Environment.getExternalStorageDirectory(), "${mCanvas}.png")
+//        f.createNewFile()
+//        val bos: ByteArrayOutputStream = ByteArrayOutputStream();
+//        bitmapFile.compress?(Bitmap.CompressFormat.PNG, 0, bos)
+//
+//        //write the bytes in file
+//        val fos: FileOutputStream = FileOutputStream(f)
+//        fos.write(bos.toByteArray());
+//        fos.flush();
+//        fos.close();
+//
+//        return f.absolutePath
+//    }
 
     fun clear() {
         paths.clear()
@@ -82,6 +121,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         currentColour = DEFAULT_COLOUR
     }
 
+    // Drawing functions
+
+
 
     override fun onDraw(canvas: Canvas) {
         canvas.save()
@@ -91,31 +133,19 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPaint.strokeWidth = ip.strokeWidth.toFloat()
             mCanvas!!.drawPath(ip.path, mPaint)
 
-
         }
 
         canvas.drawBitmap(mBitmap!!, 0f, 0f, mBitmapPaint)
 
-        Log.d("PaintView - paths", mBitmapPaint.toString())
-
-        val pathdata = hashMapOf<String, ArrayList<InputPath>>(
-            "pathname" to paths
-        )
-
-        instructionsRef.document(mCanvas.toString()).set(pathdata)
-            .addOnSuccessListener { documentReference ->
-                // Toast.makeText(this, "path added to database", Toast.LENGTH_SHORT).show()
-                Log.d("PaintView - onDraw", paths.toString())
-            }
-            .addOnFailureListener { e ->
-                Log.d("PaintView - onDraw", "Error adding to database: ", e)
-            }
-
-
         canvas.restore()
+
     }
 
+//  PMD 03/08/19
+    lateinit var XYPoints: Array<FloatArray>
+
     private fun inputStart(x: Float, y: Float) {
+
         mPath = Path()
         val ip = InputPath(currentColour, strokeWidth, mPath!!)
         paths.add(ip)
@@ -124,6 +154,10 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPath!!.moveTo(x, y)
         mX = x
         mY = y
+
+//  PMD 03/08/19
+        Log.d("PaintView - X", "${mX}")
+        Log.d("PaintView - Y", "${mY}")
     }
 
     private fun touching(x: Float, y: Float) {
@@ -149,10 +183,19 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
             MotionEvent.ACTION_DOWN -> {
                 inputStart(x, y)
+//  PMD 03/08/19
+                Log.d("PaintView-ontouch-X", "${event.getX()}")
+                Log.d("PaintView-ontouch-Y", "${event.getY()}")
+                Log.d("PaintView-ontouch-event", "${event}")
+                writeToFirestore(event)
+
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
                 touching(x, y)
+//  PMD 03/08/19
+                Log.d("PaintView-ontouch-event", "${event}")
+                writeToFirestore(event)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
@@ -162,6 +205,28 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         }
 
         return true
+    }
+
+    private val canvasRef = dbFirestore.collection("canvasdetails")
+
+    private fun writeToFirestore(event: MotionEvent) {
+
+        Log.d("PaintView-DBWrite", "PointerId: ${event.getPointerId(0)} X: ${event.getX(0)} Y: ${event.getY(0)}")
+
+        val pathdetails = hashMapOf<String, Any>(
+            "pointerId" to event.getPointerId(0),
+            "X" to event.getX(0),
+            "Y" to event.getY(0)
+        )
+
+        canvasRef.document(mCanvas.toString()).collection(mPath.toString()).add(pathdetails)
+            .addOnSuccessListener { documentReference ->
+                Log.d("PaintView - onSuccess", "Database Updated: ${documentReference}")
+            }
+            .addOnFailureListener { e ->
+                Log.d("PaintView", "Error adding to database: ", e)
+            }
+
     }
 
     companion object {
