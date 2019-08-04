@@ -10,7 +10,8 @@
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent" tools:layout_editor_absoluteY="-28dp"
-            tools:layout_editor_absoluteX="0dp" android:id="@+id/scrollView2">
+            tools:layout_editor_absoluteX="0dp" android:id="@+id/scrollView2"
+            android:background="@color/toucandoodle_cerulean">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintTop_toTopOf="parent" android:textColor="#F2F2F2"
+                    app:layout_constraintTop_toTopOf="parent" android:textColor="@color/fui_bgGoogle"
                     android:background="@drawable/rounded_select_photo"
                     android:layout_marginTop="36dp"/>
             <EditText
