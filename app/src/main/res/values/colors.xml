@@ -3,4 +3,10 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="toucandoodle_cerulean">#02B3E3</color>
+    <color name="toucandoodle_safety_orange">#FF6B00</color>
+    <color name="toucandoodle_sunglow">#FEC843</color>
+    <color name="toucandoodle_dull_magenta">#DA3AB3</color>
+    <color name="toucandoodle_caribbean_green">#0CCE7C</color>
+    <color name="toucandoodle_cerulean_dark">#2191B0</color>
 </resources>
