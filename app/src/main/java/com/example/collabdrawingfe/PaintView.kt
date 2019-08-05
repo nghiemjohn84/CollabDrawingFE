@@ -11,6 +11,9 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.justinnguyenme.base64image.Base64Image
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.util.*
 
 
@@ -57,6 +60,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         currentColour = DEFAULT_COLOUR
         strokeWidth = BRUSH_SIZE
 
+        writeToFirestore()
         createSnapshot()
     }
 
@@ -202,17 +206,17 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 Log.d("PaintView-ontouch-X", "${event.getX()}")
                 Log.d("PaintView-ontouch-Y", "${event.getY()}")
                 Log.d("PaintView-ontouch-event", "${event}")
-                writeToFirestore(event)
                 updateSnapshot()
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
                 touching(x, y)
-                writeToFirestore(event)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
                 notTouching()
+                bitmapToString(mBitmap!!)
+                writeToFirestore()
                 invalidate()
             }
         }
@@ -220,31 +224,50 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         return true
     }
 
-    private fun writeToFirestore(event: MotionEvent) {
+    private var bitmapBase64: String = ""
 
-//        val canvasRef = dbFirestore.collection(mCanvas.toString())
+    private fun bitmapToString(bitmap: Bitmap):String {
 
-        Log.d("PaintView-DBWrite", "X: ${event.getX(0)} Y: ${event.getY(0)}")
+        Base64Image.instance.encode(bitmap) { base64 ->
+//            bitmapBase64 = base64!! }
+            base64?.let {
+               bitmapBase64 = base64          }
+//                Log.d(TAG, "${base64}")
+        }
+        return bitmapBase64
+    }
+
+    private fun writeToFirestore() {
 
         val pathdetails = hashMapOf<String, Any>(
-            "colour" to currentColour,
-            "X" to event.getX(0),
-            "Y" to event.getY(0)
+            "bitmap" to bitmapBase64
         )
 
-        val canvasRef = dbFirestore.collection(mCanvas.toString())
-        canvasRef.document(mPath.toString())
-            .collection(mPath.toString())
-            .add(pathdetails)
+
+        val canvasRef = dbFirestore.collection("canvii").document(mCanvas.toString())
+        canvasRef
+//        canvasRef.collection(mPath.toString())
+//            .add(pathdetails)
+            .set(pathdetails)
             .addOnSuccessListener { documentReference ->
                 Log.d("PaintView - onSuccess", "Database Updated: ${mPath.toString()} ${documentReference}")
             }
             .addOnFailureListener { e ->
                 Log.d("PaintView", "Error adding to database: ", e)
             }
+
+
+//        val canvasRef = dbFirestore.collection(mCanvas.toString())
+//        canvasRef.document(mPath.toString())
+//            .collection(mPath.toString())
+//            .add(pathdetails)
+//            .addOnSuccessListener { documentReference ->
+//                Log.d("PaintView - onSuccess", "Database Updated: ${mPath.toString()} ${documentReference}")
+//            }
+//            .addOnFailureListener { e ->
+//                Log.d("PaintView", "Error adding to database: ", e)
+//            }
     }
-
-
 
 
     private fun createSnapshot() {
