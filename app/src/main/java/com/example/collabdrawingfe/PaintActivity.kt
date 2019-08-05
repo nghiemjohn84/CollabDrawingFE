@@ -40,6 +40,26 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.brush()
                 return true
             }
+            R.id.red ->{
+                paintView!!.red()
+                return true
+            }
+            R.id.black ->{
+                paintView!!.black()
+                return true
+            }
+            R.id.blue ->{
+                paintView!!.blue()
+                return true
+            }
+            R.id.green ->{
+                paintView!!.green()
+                return true
+            }
+            R.id.white ->{
+                paintView!!.white()
+                return true
+            }
             R.id.invite -> {
                 val activityIntent = Intent(this, InviteCollaboratorActivity::class.java)
                 startActivity(activityIntent)
@@ -47,6 +67,12 @@ class PaintActivity : AppCompatActivity() {
 
             R.id.gallery -> {
                 val activityIntent = Intent(this, GalleryActivity::class.java)
+                startActivity(activityIntent)
+
+            }
+            R.id.save -> {
+                val activityIntent = Intent(this, GalleryActivity::class.java)
+                //call itemtobesaved method here?
                 startActivity(activityIntent)
 
             }

@@ -14,7 +14,25 @@
     <item
             android:id="@+id/eraser"
             app:showAsAction="never"
-            android:title="Eraser"/>
+            android:title="Rubber"/>
+    <item android:id="@+id/colour"
+          android:title="Brush Colour"
+          app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/black"
+                  android:title="Black"/>
+            <item android:id="@+id/red"
+                  android:title="Red"/>
+            <item android:id="@+id/blue"
+                  android:title="Blue"/>
+            <item android:id="@+id/green"
+                  android:title="Green"/>
+            <item android:id="@+id/white"
+                  android:title="White"/>
+        </menu>
+    </item>
+    <item android:title="Item" app:showAsAction="always|withText" android:icon="@drawable/ic_save_white_24dp"
+          android:id="@+id/save"/>
     <item android:title="Invite" android:id="@+id/invite" app:showAsAction="always|withText"
           android:icon="@drawable/ic_supervisor_account_white_24dp"/>
     <item android:title="Gallery" android:id="@+id/gallery" app:showAsAction="always|withText"
