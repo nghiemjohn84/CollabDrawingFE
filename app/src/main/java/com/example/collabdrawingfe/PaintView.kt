@@ -69,7 +69,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     fun eraser() {
         previousColour = currentColour
-        currentColour = Color.WHITE
+        currentColour = backgroundColour
     }
 
 
@@ -77,7 +77,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         currentColour = previousColour
     }
 
-    //Colours:
+    //Brush Colours:
     fun red() {
         currentColour = Color.RED
     }
@@ -94,6 +94,51 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         currentColour = Color.WHITE
     }
 
+    //Background Colours:
+    fun bgRed() {
+        backgroundColour = Color.RED
+        currentColour = backgroundColour
+
+    }
+    fun bgBlack() {
+        backgroundColour = Color.BLACK
+        currentColour = backgroundColour
+
+    }
+    fun bgBlue() {
+        backgroundColour = Color.BLUE
+        currentColour = backgroundColour
+
+    }
+    fun bgGreen() {
+        backgroundColour = Color.GREEN
+        currentColour = backgroundColour
+
+    }
+    fun bgWhite() {
+        backgroundColour = Color.WHITE
+        currentColour = backgroundColour
+
+    }
+
+    //Brush Sizes
+
+    fun bsSmall(){
+        strokeWidth = 5
+
+    }
+    fun bsMedium(){
+        strokeWidth = 20
+    }
+    fun bsLarge(){
+        strokeWidth = 40
+
+    }
+    fun bsChunky(){
+        strokeWidth = 80
+
+
+    }
 
 
     // Drawing functions
@@ -242,7 +287,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     companion object {
 
-        const val BRUSH_SIZE = 20
+        const val BRUSH_SIZE = 5
         const val DEFAULT_COLOUR = Color.BLACK
         const val DEFAULT_BG_COLOUR = Color.WHITE
         private const val TOUCH_TOLERANCE = 4f
