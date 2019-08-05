@@ -270,7 +270,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     companion object {
 
-        const val BRUSH_SIZE = 20
+        const val BRUSH_SIZE = 5
         const val DEFAULT_COLOUR = Color.BLACK
         const val DEFAULT_BG_COLOUR = Color.WHITE
         private const val TOUCH_TOLERANCE = 4f
