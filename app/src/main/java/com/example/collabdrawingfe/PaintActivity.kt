@@ -60,6 +60,26 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.white()
                 return true
             }
+            R.id.bgRed ->{
+                paintView!!.bgRed()
+                return true
+            }
+            R.id.bgBlack ->{
+                paintView!!.bgBlack()
+                return true
+            }
+            R.id.bgBlue ->{
+                paintView!!.bgBlue()
+                return true
+            }
+            R.id.bgGreen ->{
+                paintView!!.bgGreen()
+                return true
+            }
+            R.id.bgWhite ->{
+                paintView!!.bgWhite()
+                return true
+            }
             R.id.invite -> {
                 val activityIntent = Intent(this, InviteCollaboratorActivity::class.java)
                 startActivity(activityIntent)

@@ -69,7 +69,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     fun eraser() {
         previousColour = currentColour
-        currentColour = Color.WHITE
+        currentColour = backgroundColour
     }
 
 
@@ -77,7 +77,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         currentColour = previousColour
     }
 
-    //Colours:
+    //Brush Colours:
     fun red() {
         currentColour = Color.RED
     }
@@ -93,6 +93,34 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     fun white() {
         currentColour = Color.WHITE
     }
+
+    //Background Colours:
+    fun bgRed() {
+        backgroundColour = Color.RED
+        currentColour = backgroundColour
+
+    }
+    fun bgBlack() {
+        backgroundColour = Color.BLACK
+        currentColour = backgroundColour
+
+    }
+    fun bgBlue() {
+        backgroundColour = Color.BLUE
+        currentColour = backgroundColour
+
+    }
+    fun bgGreen() {
+        backgroundColour = Color.GREEN
+        currentColour = backgroundColour
+
+    }
+    fun bgWhite() {
+        backgroundColour = Color.WHITE
+        currentColour = backgroundColour
+
+    }
+
 
 
 

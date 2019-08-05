@@ -31,6 +31,22 @@
                   android:title="White"/>
         </menu>
     </item>
+    <item android:id="@+id/background_colour"
+          android:title="Background Colour"
+          app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/bgBlack"
+                  android:title="Black"/>
+            <item android:id="@+id/bgRed"
+                  android:title="Red"/>
+            <item android:id="@+id/bgBlue"
+                  android:title="Blue"/>
+            <item android:id="@+id/bgGreen"
+                  android:title="Green"/>
+            <item android:id="@+id/bgWhite"
+                  android:title="White"/>
+        </menu>
+    </item>
     <item android:title="Item" app:showAsAction="always|withText" android:icon="@drawable/ic_save_white_24dp"
           android:id="@+id/save"/>
     <item android:title="Invite" android:id="@+id/invite" app:showAsAction="always|withText"
