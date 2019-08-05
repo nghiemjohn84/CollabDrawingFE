@@ -23,6 +23,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private val mPaint: Paint
     private val paths = ArrayList<InputPath>()
     private var currentColour: Int = 0
+    private var previousColour: Int = 0
     private var backgroundColour = DEFAULT_BG_COLOUR
     private var strokeWidth: Int = 0
     private var mBitmap: Bitmap? = null
@@ -67,12 +68,33 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     fun eraser() {
+        previousColour = currentColour
         currentColour = Color.WHITE
     }
 
+
     fun brush() {
-        currentColour = DEFAULT_COLOUR
+        currentColour = previousColour
     }
+
+    //Colours:
+    fun red() {
+        currentColour = Color.RED
+    }
+    fun black() {
+        currentColour = Color.BLACK
+    }
+    fun blue() {
+        currentColour = Color.BLUE
+    }
+    fun green() {
+        currentColour = Color.GREEN
+    }
+    fun white() {
+        currentColour = Color.WHITE
+    }
+
+
 
     // Drawing functions
 
