@@ -121,7 +121,24 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     }
 
+    //Brush Sizes
 
+    fun bsSmall(){
+        strokeWidth = 5
+
+    }
+    fun bsMedium(){
+        strokeWidth = 20
+    }
+    fun bsLarge(){
+        strokeWidth = 40
+
+    }
+    fun bsChunky(){
+        strokeWidth = 80
+
+
+    }
 
 
     // Drawing functions

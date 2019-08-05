@@ -80,6 +80,22 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.bgWhite()
                 return true
             }
+            R.id.bsSmall ->{
+                paintView!!.bsSmall()
+                return true
+            }
+            R.id.bsMedium ->{
+                paintView!!.bsMedium()
+                return true
+            }
+            R.id.bsLarge ->{
+                paintView!!.bsLarge()
+                return true
+            }
+            R.id.bsChunky ->{
+                paintView!!.bsChunky()
+                return true
+            }
             R.id.invite -> {
                 val activityIntent = Intent(this, InviteCollaboratorActivity::class.java)
                 startActivity(activityIntent)
