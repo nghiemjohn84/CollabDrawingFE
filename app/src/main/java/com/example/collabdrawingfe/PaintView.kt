@@ -7,12 +7,11 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.MetadataChanges
-
-import java.util.ArrayList
+import com.google.firebase.firestore.QuerySnapshot
+import java.util.*
 
 
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -58,6 +57,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         currentColour = DEFAULT_COLOUR
         strokeWidth = BRUSH_SIZE
 
+        createSnapshot()
     }
 
 
@@ -170,8 +170,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mX = x
         mY = y
 
-        setupSnapShot()
-        listenToDocumentLocal()
+//        setupSnapShot()
+//        listenToDocumentLocal()
     }
 
     private fun touching(x: Float, y: Float) {
@@ -197,12 +197,13 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
             MotionEvent.ACTION_DOWN -> {
                 inputStart(x, y)
+
 //  PMD 03/08/19
                 Log.d("PaintView-ontouch-X", "${event.getX()}")
                 Log.d("PaintView-ontouch-Y", "${event.getY()}")
                 Log.d("PaintView-ontouch-event", "${event}")
                 writeToFirestore(event)
-
+                updateSnapshot()
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
@@ -243,46 +244,96 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             }
     }
 
-    private fun setupSnapShot() {
 
-        val snapshotRef = dbFirestore.collection(mCanvas.toString()).document(mPath.toString())
-        snapshotRef.addSnapshotListener{snapshot, e ->
-            if(e != null) {
-                Log.d("PaintActivity", "Listen Failed.", e)
-                return@addSnapshotListener
-            }
 
-            if(snapshot != null && !snapshot.exists()) {
-                Log.d("PaintActivity", "Current data: ${snapshot.data}")
 
-            } else {
-                Log.d("PaintActivity","Current data: null")
-            }
-        }
+    private fun createSnapshot() {
+        Log.d(TAG,"Entered create snapshot")
+        var canvasCollection = dbFirestore.collection(mCanvas.toString())
+            .addSnapshotListener(EventListener<QuerySnapshot> {documentSnapshots, err ->
+                if(err != null) {
+                    Log.e(TAG, "Listen Failed", err)
+                    return@EventListener
+                } else {
+                    Log.d(TAG + "- snapshot", "Snapshot Created")
+                }
+
+                val pathList = mutableListOf<CanvasPath>()
+
+                Log.d(TAG, "${documentSnapshots}")
+
+                if(documentSnapshots!!.isEmpty()) {
+                    Log.d(TAG, "${documentSnapshots}")
+//                    val canvas_path = doc.toObject(CanvasPath::class.java)
+//                    canvas_path.id = doc.id
+//                    canvas_path.name = mPath.toString()
+//                    pathList.add(canvas_path)
+                }
+                for(doc in documentSnapshots!!) {
+                    val canvas_path = doc.toObject(CanvasPath::class.java)
+                    canvas_path.id = doc.id
+                    canvas_path.name = mPath.toString()
+                    pathList.add(canvas_path)
+                }
+            })
     }
 
-    private fun listenToDocumentLocal() {
-        // [START listen_document_local]
-        val snapshotRef = dbFirestore.collection(mCanvas.toString()).document(mPath.toString())
-        snapshotRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.d("PaintActivity", "Listen failed.", e)
-                return@addSnapshotListener
-            }
+    private fun updateSnapshot() {
+        var doc_collection = dbFirestore.collection(mCanvas.toString())
+            .get()
+            .addOnCompleteListener (OnCompleteListener<QuerySnapshot> {task ->
+                if(task.isSuccessful) {
+                    for (document in task.result!!) {
+                        Log.d(TAG, document.id + " => " + document.data)
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents", task.exception)
+                }
 
-            val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
-                "Local"
-            else
-                "Server"
-
-            if (snapshot != null && snapshot.exists()) {
-                Log.d("PaintActivity", "$source data: ${snapshot.data}")
-            } else {
-                Log.d("PaintActivity", "$source data: null")
-            }
-        }
-        // [END listen_document_local]
+            })
     }
+
+
+//    private fun setupSnapShot() {
+//
+//        val snapshotRef = dbFirestore.collection(mCanvas.toString()).document(mPath.toString())
+//        snapshotRef.addSnapshotListener{snapshot, e ->
+//            if(e != null) {
+//                Log.d("PaintActivity", "Listen Failed.", e)
+//                return@addSnapshotListener
+//            }
+//
+//            if(snapshot != null && !snapshot.exists()) {
+//                Log.d("PaintActivity", "Current data: ${snapshot.data}")
+//
+//            } else {
+//                Log.d("PaintActivity","Current data: null")
+//            }
+//        }
+//    }
+//
+//    private fun listenToDocumentLocal() {
+//        // [START listen_document_local]
+//        val snapshotRef = dbFirestore.collection(mCanvas.toString()).document(mPath.toString())
+//        snapshotRef.addSnapshotListener { snapshot, e ->
+//            if (e != null) {
+//                Log.d("PaintActivity", "Listen failed.", e)
+//                return@addSnapshotListener
+//            }
+//
+//            val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
+//                "Local"
+//            else
+//                "Server"
+//
+//            if (snapshot != null && snapshot.exists()) {
+//                Log.d("PaintActivity", "$source data: ${snapshot.data}")
+//            } else {
+//                Log.d("PaintActivity", "$source data: null")
+//            }
+//        }
+//        // [END listen_document_local]
+//    }
 
 
     companion object {
@@ -291,5 +342,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         const val DEFAULT_COLOUR = Color.BLACK
         const val DEFAULT_BG_COLOUR = Color.WHITE
         private const val TOUCH_TOLERANCE = 4f
+        const val TAG = "PaintActivity"
     }
 }
