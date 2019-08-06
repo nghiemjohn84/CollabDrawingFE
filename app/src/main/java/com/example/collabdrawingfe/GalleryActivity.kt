@@ -25,7 +25,7 @@ class GalleryActivity : AppCompatActivity() {
 //        Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/kotlinstorage-31352.appspot.com/o/images%2Fbart.jpg?alt=media&token=9fe1f1e0-4bae-444f-a2f7-55dc33487553").into(tempImage)
 
         newCanvas_button_gallery.setOnClickListener { view ->
-            val intentActivity = Intent(this, PaintActivity::class.java)
+            val intentActivity = Intent(this, chooseDoodleActivity::class.java)
             startActivity(intentActivity)
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
