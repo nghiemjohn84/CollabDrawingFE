@@ -4,21 +4,71 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class PaintActivity : AppCompatActivity() {
 
+    companion object {
+        const val DOODLE_NAME = "DOODLE_NAME"
+    }
+
     private var paintView: PaintView? = null
+
+    // Database connection details
+    private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var doodlesCollection = dbFirestore.collection("doodles")
+    private var user: FirebaseUser? = null
+    // private var activeUsers = dbFirestore.collection("doodles")
+    private var key = dbFirestore.collection("doodles")
+    var activeUsers = ArrayList<Map<Any, String>>()
+    var fields = ArrayList<String>()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         paintView = findViewById(R.id.paintView) as PaintView
+
+        // Doodling code 06/08/19
+        user = FirebaseAuth.getInstance().currentUser
+        val doodleRef = doodlesCollection.document(intent.getStringExtra(DOODLE_NAME))
+        doodleRef.get()
+            .addOnCompleteListener(OnCompleteListener<DocumentSnapshot> {
+                if(it.isSuccessful) {
+                    val list = ArrayList<String>()
+                    val map = it.result!!.data
+                    for((key) in map!!) {
+                        list.add(key)
+                        Log.d("PaintActivity", key)
+                    }
+                    Log.d("PaintActivity", "${map.entries}")
+                    for(entry in map.entries) {
+                        Log.d("PaintActivity", "${entry.value}")
+                        var entrydetails = entry.value
+                        Log.d("PaintActivity", "Here")
+                    }
+                }
+            })
+
+
+
+
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
-        paintView!!.init(metrics)
+        paintView!!.init(metrics, intent.getStringExtra(DOODLE_NAME))
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuInflater = menuInflater
