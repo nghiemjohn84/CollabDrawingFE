@@ -48,7 +48,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
  //   private val instructionsRef = dbFirestore.collection("instructions")
 
 
-    fun init(metrics: DisplayMetrics) {
+    fun init(metrics: DisplayMetrics, doodle: String) {
         val height = metrics.heightPixels
         val width = metrics.widthPixels
 
@@ -315,48 +315,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
             })
     }
-
-
-//    private fun setupSnapShot() {
-//
-//        val snapshotRef = dbFirestore.collection(mCanvas.toString()).document(mPath.toString())
-//        snapshotRef.addSnapshotListener{snapshot, e ->
-//            if(e != null) {
-//                Log.d("PaintActivity", "Listen Failed.", e)
-//                return@addSnapshotListener
-//            }
-//
-//            if(snapshot != null && !snapshot.exists()) {
-//                Log.d("PaintActivity", "Current data: ${snapshot.data}")
-//
-//            } else {
-//                Log.d("PaintActivity","Current data: null")
-//            }
-//        }
-//    }
-//
-//    private fun listenToDocumentLocal() {
-//        // [START listen_document_local]
-//        val snapshotRef = dbFirestore.collection(mCanvas.toString()).document(mPath.toString())
-//        snapshotRef.addSnapshotListener { snapshot, e ->
-//            if (e != null) {
-//                Log.d("PaintActivity", "Listen failed.", e)
-//                return@addSnapshotListener
-//            }
-//
-//            val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
-//                "Local"
-//            else
-//                "Server"
-//
-//            if (snapshot != null && snapshot.exists()) {
-//                Log.d("PaintActivity", "$source data: ${snapshot.data}")
-//            } else {
-//                Log.d("PaintActivity", "$source data: null")
-//            }
-//        }
-//        // [END listen_document_local]
-//    }
 
 
     companion object {
