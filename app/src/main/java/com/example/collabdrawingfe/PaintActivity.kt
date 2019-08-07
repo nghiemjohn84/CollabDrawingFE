@@ -265,8 +265,12 @@ class PaintActivity : AppCompatActivity() {
 
             }
             R.id.share -> {
-                val activityIntent = Intent (this, ShareActivity::class.java)
-                startActivity(activityIntent)
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+                    type = "text/plain"
+                }
+                startActivity(sendIntent)
             }
 
         }
