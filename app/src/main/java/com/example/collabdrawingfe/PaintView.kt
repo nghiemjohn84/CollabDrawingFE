@@ -79,10 +79,30 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(DrawInstruction::class.java)
                 Log.d("command", value.toString())
+
+
+                when (value!!.command) {
+                    "init" -> {
+                    }
+                    "inputStart" -> {
+                        inputStart(value.x!!, value.y!!)
+                        invalidate()
+
+                    }
+                    "touching" -> {
+                        touching(value.x!!, value.y!!)
+                        invalidate()
+
+                    }
+                    "notTouching" -> {
+                        notTouching()
+                        invalidate()
+                        drawInstruction.command = "init"
+                        drawnInstruction!!.setValue(drawInstruction)
+                    }
+                }
             }
         })
-
-
 //        writeToFirestore()
 //        createSnapshot()
     }
