@@ -208,30 +208,7 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.green()
                 return true
             }
-            R.id.white ->{
-                paintView!!.white()
-                return true
-            }
-            R.id.bgRed ->{
-                paintView!!.bgRed()
-                return true
-            }
-            R.id.bgBlack ->{
-                paintView!!.bgBlack()
-                return true
-            }
-            R.id.bgBlue ->{
-                paintView!!.bgBlue()
-                return true
-            }
-            R.id.bgGreen ->{
-                paintView!!.bgGreen()
-                return true
-            }
-            R.id.bgWhite ->{
-                paintView!!.bgWhite()
-                return true
-            }
+
             R.id.bsSmall ->{
                 paintView!!.bsSmall()
                 return true

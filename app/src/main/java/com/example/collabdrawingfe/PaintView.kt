@@ -68,7 +68,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         drawInstruction.x = 0F
         drawInstruction.y = 0F
-        drawInstruction.command = "initialise"
+        drawInstruction.command = "init"
         drawnInstruction!!.setValue(drawInstruction)
 
         drawnInstruction!!.addValueEventListener(object : ValueEventListener {
@@ -96,9 +96,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                     }
                     "notTouching" -> {
                         notTouching()
-                        invalidate()
                         drawInstruction.command = "init"
-                        drawnInstruction!!.setValue(drawInstruction)
+                        drawnInstruction?.setValue(drawInstruction)
+                        invalidate()
                     }
                 }
             }
@@ -136,36 +136,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
     fun green() {
         currentColour = Color.GREEN
-    }
-    fun white() {
-        currentColour = Color.WHITE
-    }
-
-    //Background Colours:
-    fun bgRed() {
-        backgroundColour = Color.RED
-        currentColour = backgroundColour
-
-    }
-    fun bgBlack() {
-        backgroundColour = Color.BLACK
-        currentColour = backgroundColour
-
-    }
-    fun bgBlue() {
-        backgroundColour = Color.BLUE
-        currentColour = backgroundColour
-
-    }
-    fun bgGreen() {
-        backgroundColour = Color.GREEN
-        currentColour = backgroundColour
-
-    }
-    fun bgWhite() {
-        backgroundColour = Color.WHITE
-        currentColour = backgroundColour
-
     }
 
     //Brush Sizes
@@ -246,33 +216,30 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         when (event.action) {
 
             MotionEvent.ACTION_DOWN -> {
-                drawInstruction.command = "screen-touched"
+                drawInstruction.command = "inputStart"
+                drawInstruction.colour = currentColour
+                drawInstruction.strokeWidth = strokeWidth
                 drawnInstruction!!.setValue(drawInstruction)
 
                 inputStart(x, y)
 
-////  PMD 03/08/19
-//                Log.d("PaintView-ontouch-X", "${event.getX()}")
-//                Log.d("PaintView-ontouch-Y", "${event.getY()}")
-//                Log.d("PaintView-ontouch-event", "${event}")
-//                updateSnapshot()
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
-                drawInstruction.command = "finger-moving"
+                drawInstruction.command = "touching"
                 drawnInstruction!!.setValue(drawInstruction)
 
                 touching(x, y)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
-                drawInstruction.command = "finger-removed"
+                drawInstruction.command = "notTouching"
                 drawnInstruction!!.setValue(drawInstruction)
                 notTouching()
 //                bitmapToString(mBitmap!!)
 //                writeToFirestore()
                 invalidate()
-                drawInstruction.command = "initialise"
+                drawInstruction.command = "init"
                 drawnInstruction!!.setValue(drawInstruction)
 
             }
