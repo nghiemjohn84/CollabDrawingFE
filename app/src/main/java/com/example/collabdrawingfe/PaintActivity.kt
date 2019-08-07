@@ -163,6 +163,11 @@ class PaintActivity : AppCompatActivity() {
 //
 //    }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.canvas, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
