@@ -256,6 +256,10 @@ class PaintActivity : AppCompatActivity() {
                 startActivity(activityIntent)
 
             }
+            R.id.share -> {
+                val activityIntent = Intent (this, ShareActivity::class.java)
+                startActivity(activityIntent)
+            }
 
         }
 
