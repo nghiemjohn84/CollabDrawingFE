@@ -2,6 +2,7 @@ package com.example.collabdrawingfe
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,11 @@ class GalleryRecyclerAdapter(private val context: Context, private val drawings:
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val drawing = drawings[position]
         Picasso.get().load(drawing).into(holder.drawingURL)
+        holder.drawingURL.setOnClickListener{
+            val intent = Intent(context, FullScreenImageActivity::class.java)
+                intent.putExtra("IMAGE_URL", drawing)
+                context.startActivity(intent)
+        }
         holder.drawingPosition = position
     }
 
@@ -33,11 +39,6 @@ class GalleryRecyclerAdapter(private val context: Context, private val drawings:
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val drawingURL = itemView?.findViewById<ImageView>(R.id.image_item_gallery)
         var drawingPosition = 0
-        init {
-            itemView.setOnClickListener {
-                val intent = Intent(context, PaintActivity::class.java)
-                context.startActivity(intent)
-            }
-        }
+
     }
 }
