@@ -39,6 +39,7 @@ import java.util.*
 class PaintActivity : AppCompatActivity() {
 
     private var filePath: Uri? = null
+    private var fileNameForUpload: String? = null
 
     internal var storage : FirebaseStorage?= null
     internal var storageReference:StorageReference?= null
@@ -59,6 +60,7 @@ class PaintActivity : AppCompatActivity() {
 
             val n = Random.nextInt(10000)
             val fileName = "image$n.jpg"
+            fileNameForUpload = "image$n"
             val file = File(myDir, fileName)
             filePath = Uri.fromFile(file)
             Log.d("screenshot", "$filePath")
@@ -208,6 +210,15 @@ class PaintActivity : AppCompatActivity() {
                 if(task.isSuccessful) {
                     val downloadUri = task.result
                     Log.d("screenshot", "$downloadUri")
+
+                    val galleryUriRef = FirebaseDatabase.getInstance().getReference("galleryURLs")
+//                    val urlId = fileNameForUpload
+                    val urlId = galleryUriRef.push().key
+
+                    galleryUriRef.child("$urlId").setValue(downloadUri.toString())
+
+
+
                 } else {
                     Toast.makeText(applicationContext, "URL failed", Toast.LENGTH_SHORT).show()
                 }
