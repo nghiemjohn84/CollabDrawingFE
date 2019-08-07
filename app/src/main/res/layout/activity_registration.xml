@@ -24,7 +24,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintTop_toTopOf="parent" android:textColor="#00F7F4F4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/common_google_signin_btn_text_dark_default"
                     android:background="@drawable/rounded_select_photo"
                     android:layout_marginTop="36dp"/>
             <EditText
