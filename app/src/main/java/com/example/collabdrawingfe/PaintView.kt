@@ -246,7 +246,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         when (event.action) {
 
             MotionEvent.ACTION_DOWN -> {
-                drawInstruction.command = "screen-touched"
+                drawInstruction.command = "inputStart"
                 drawnInstruction!!.setValue(drawInstruction)
 
                 inputStart(x, y)
@@ -259,20 +259,20 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
-                drawInstruction.command = "finger-moving"
+                drawInstruction.command = "touching"
                 drawnInstruction!!.setValue(drawInstruction)
 
                 touching(x, y)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
-                drawInstruction.command = "finger-removed"
+                drawInstruction.command = "notTouching"
                 drawnInstruction!!.setValue(drawInstruction)
                 notTouching()
 //                bitmapToString(mBitmap!!)
 //                writeToFirestore()
                 invalidate()
-                drawInstruction.command = "initialise"
+                drawInstruction.command = "init"
                 drawnInstruction!!.setValue(drawInstruction)
 
             }
