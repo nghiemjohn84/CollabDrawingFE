@@ -137,36 +137,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     fun green() {
         currentColour = Color.GREEN
     }
-    fun white() {
-        currentColour = Color.WHITE
-    }
-
-    //Background Colours:
-    fun bgRed() {
-        backgroundColour = Color.RED
-        currentColour = backgroundColour
-
-    }
-    fun bgBlack() {
-        backgroundColour = Color.BLACK
-        currentColour = backgroundColour
-
-    }
-    fun bgBlue() {
-        backgroundColour = Color.BLUE
-        currentColour = backgroundColour
-
-    }
-    fun bgGreen() {
-        backgroundColour = Color.GREEN
-        currentColour = backgroundColour
-
-    }
-    fun bgWhite() {
-        backgroundColour = Color.WHITE
-        currentColour = backgroundColour
-
-    }
 
     //Brush Sizes
 
