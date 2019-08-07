@@ -1,5 +1,6 @@
 package com.example.collabdrawingfe
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
@@ -22,6 +24,8 @@ import com.google.firebase.database.*
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
@@ -31,8 +35,14 @@ import java.util.*
 
 class PaintActivity : AppCompatActivity() {
 
+    private var filePath: Uri? = null
+
+    internal var storage : FirebaseStorage?= null
+    internal var storageReference:StorageReference?= null
+
     companion object {
         const val DOODLE_NAME = "DOODLE_NAME"
+    }
 
         fun saveScreenshot(bitmap: Bitmap) {
             val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
@@ -47,6 +57,8 @@ class PaintActivity : AppCompatActivity() {
             val n = Random.nextInt(10000)
             val fileName = "image$n.jpg"
             val file = File(myDir, fileName)
+            filePath = Uri.fromFile(file)
+            Log.d("screenshot", "$filePath")
             Log.d("screenshot", "$file")
             if(file.exists())
                 file.delete()
@@ -66,14 +78,13 @@ class PaintActivity : AppCompatActivity() {
 
             val bit = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bit)
-//            v.layout(0, 0, v.layoutParams.width, v.layoutParams.height)
             v.layout(0, 0, v.layoutParams.width, v.layoutParams.height)
 
             v.draw(canvas)
             Log.d("screenshot", "file created")
             return bit
         }
-    }
+    //}
 
     private var paintView: PaintView? = null
 
@@ -97,6 +108,9 @@ class PaintActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage!!.reference
 
         // Doodling code 06/08/19
         doodle = dbFirebase.getReference(intent.getStringExtra(DOODLE_NAME))
@@ -157,56 +171,34 @@ class PaintActivity : AppCompatActivity() {
         }
     }
 
+    private fun uploadFile() {
+        if(filePath != null) {
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setTitle("uploading...")
+            progressDialog.show()
+
+            val imageRef = storageReference!!.child("gallery/" + UUID.randomUUID().toString())
+            imageRef.putFile(filePath!!)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "file uploaded", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "file failed", Toast.LENGTH_SHORT).show()
+                }
+                .addOnProgressListener { taskSnapshot ->
+                    val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
+                    progressDialog.setMessage("uploaded" + progress.toInt() + "%...")
+                }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         activeUsers.removeEventListener(newUserEventListener)
         key.removeValue()
     }
-
-//    fun takeScreenShot(view: PaintView): Bitmap? {
-//        val snapshot = Bitmap.createBitmap(view.getBitmap())
-//        return snapshot
-//    }
-//
-//    private fun save(finalBitmap: Bitmap) {
-//        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
-//        val myDir = File("$root/CollaborativeDoodling")
-//
-//        if (!myDir.exists()) {
-//            myDir.mkdirs()
-//        }
-//
-//        val generator = Random()
-//        var n = 10000
-//        n = generator.nextInt(n)
-//        val iname = "doodle$n.jpg"
-//        val file = File(myDir, iname)
-//        if (file.exists())
-//            file.delete()
-//        try {
-//            val out = FileOutputStream(file)
-//            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-//            out.flush()
-//            out.close()
-//            Toast.makeText(
-//                applicationContext,
-//                "Saved Sucessfully",
-//                Toast.LENGTH_LONG
-//            ).show()
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//
-//        MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null,
-//            object : MediaScannerConnection.OnScanCompletedListener {
-//                override fun onScanCompleted(path: String, uri: Uri) {
-//                    Log.i("ExternalStorage", "Scanned $path:")
-//                    Log.i("ExternalStorage", "-> uri=$uri")
-//                }
-//            })
-//
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuInflater = menuInflater
@@ -275,6 +267,10 @@ class PaintActivity : AppCompatActivity() {
             R.id.save -> {
                 val bitmap = loadScreenshot(findViewById(R.id.paintView), 750, 1000)
                 saveScreenshot(bitmap!!)
+                Handler().postDelayed({
+                    uploadFile()
+                }, 1000)
+
 //
             }
             }
