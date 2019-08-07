@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 
 import kotlinx.android.synthetic.main.activity_registration.*
 
@@ -78,17 +79,30 @@ class RegistrationActivity : AppCompatActivity() {
         Log.d("RegistrationActivity", "Email is: $email")
         Log.d("RegistrationActivity", "Password is: $password")
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                Log.d("RegisterUser", "Successfully created user with uid ${task.result?.user?.uid}")
-//                    insertUser(email, userName, it.result?.user?.uid!!)
-                var userId = mAuth!!.currentUser!!.uid
-//                    clearInputs()
-            } else {
-                Log.e("RegisterUser", "Failed")
+//        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+//            if (task.isSuccessful) {
+//                Log.d("RegisterUser", "Successfully created user with uid ${task.result?.user?.uid}")
+////                    insertUser(email, userName, it.result?.user?.uid!!)
+//                var userId = mAuth!!.currentUser!!.uid
+//                task.result?.user?.displayName
+////                    clearInputs()
+//            } else {
+//                Log.e("RegisterUser", "Failed")
+//
+//                Toast.makeText(this, "User Registration has failed", Toast.LENGTH_LONG).show()
+//            }
+//        }
 
-                Toast.makeText(this, "User Registration has failed", Toast.LENGTH_LONG).show()
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this)
+        { task ->
+            if(task.isSuccessful) {
+                mAuth.currentUser?.updateProfile(UserProfileChangeRequest
+                    .Builder()
+                    .setDisplayName(userName)
+                    .build())
             }
+            var userId = mAuth!!.currentUser!!.uid
+            var userName = mAuth!!.currentUser!!.displayName
         }
 
         signIn(email, password)
