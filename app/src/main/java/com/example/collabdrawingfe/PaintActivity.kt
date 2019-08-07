@@ -297,7 +297,7 @@ class PaintActivity : AppCompatActivity() {
 
             }
             R.id.save -> {
-                val bitmap = loadScreenshot(findViewById(R.id.paintView), 750, 1000)
+                val bitmap = loadScreenshot(findViewById(R.id.paintView), 700, 1000)
                 saveScreenshot(bitmap!!)
                 Handler().postDelayed({
                     uploadFile()

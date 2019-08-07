@@ -42,7 +42,7 @@ class GalleryActivity : AppCompatActivity() {
     }
 
     private fun fetchAllImages() {
-        imageRef = FirebaseDatabase.getInstance().getReference("testImages")
+        imageRef = FirebaseDatabase.getInstance().getReference("galleryURLs")
         imageRef.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
