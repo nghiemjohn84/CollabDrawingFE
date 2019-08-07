@@ -1,6 +1,7 @@
 package com.example.collabdrawingfe
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -8,15 +9,89 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 import kotlinx.android.synthetic.main.activity_registration.*
+import java.io.IOException
+import java.util.*
+
+
+class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
+
+    private val PICK_IMAGE_REQUEST = 1234
+
+    private fun showFileChooser() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Photo"), PICK_IMAGE_REQUEST)
+    }
 
 
 
-class RegistrationActivity : AppCompatActivity() {
+    private var filePath: Uri? = null
+
+    internal var storage : FirebaseStorage?=null
+    internal var storageReference:StorageReference?=null
+
+    override fun onClick(p0: View?) {
+        if (p0 === select_photo_button_registration)
+            showFileChooser()
+        else if (p0 === register_button_registration)
+            uploadFile()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK &&
+            data != null && data.data != null)
+        {
+            filePath = data.data
+
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
+                val bitmapDrawable = BitmapDrawable(bitmap)
+                select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
+//                image_imageView!!.setImageBitmap(bitmap)
+
+            } catch (e: IOException)
+            {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun uploadFile() {
+
+        if (filePath != null)
+        {
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setTitle("Uploading...")
+            progressDialog.show()
+
+            val imageRef = storageReference!!.child("profilePics/" + UUID.randomUUID().toString())
+            imageRef.putFile(filePath!!)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "File Uploaded", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
+                }
+                .addOnProgressListener { taskSnapshot ->
+                    val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
+                    progressDialog.setMessage("Uploaded " + progress.toInt() + "%...")
+
+                }
+        }
+
+    }
 
 //    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 //    private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -27,11 +102,13 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
 
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage!!.reference
 
 
-        register_button_registration.setOnClickListener {
-            registerUser()
-        }
+
+        register_button_registration.setOnClickListener(this)
+        select_photo_button_registration.setOnClickListener(this)
 
         already_have_an_account_text_view.setOnClickListener {
             Log.d("RegistrationActivity", "Try to show Log in Activity")
@@ -41,30 +118,30 @@ class RegistrationActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        select_photo_button_registration.setOnClickListener {
-            Log.d("RegistrationActivity", "select photo button clicked")
-
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, 0)
-        }
+//        select_photo_button_registration.setOnClickListener {
+//            Log.d("RegistrationActivity", "select photo button clicked")
+//
+//            val intent = Intent(Intent.ACTION_PICK)
+//            intent.type = "image/*"
+//            startActivityForResult(intent, 0)
+//        }
     }
 
     var selectedPhotoURI: Uri? = null
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            //check what the image was....
-            Log.d("RegistrationActivity", "Photo was selected")
-
-            selectedPhotoURI = data.data
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoURI)
-            val bitmapDrawable = BitmapDrawable(bitmap)
-            select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+//            //check what the image was....
+//            Log.d("RegistrationActivity", "Photo was selected")
+//
+//            selectedPhotoURI = data.data
+//            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoURI)
+//            val bitmapDrawable = BitmapDrawable(bitmap)
+//            select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
+//        }
+//    }
 
     private fun registerUser() {
         val userName = username_editText_registration.text.toString()
