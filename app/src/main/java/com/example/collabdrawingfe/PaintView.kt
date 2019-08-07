@@ -68,7 +68,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         drawInstruction.x = 0F
         drawInstruction.y = 0F
-        drawInstruction.command = "initialise"
+        drawInstruction.command = "init"
         drawnInstruction!!.setValue(drawInstruction)
 
         drawnInstruction!!.addValueEventListener(object : ValueEventListener {
@@ -96,9 +96,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                     }
                     "notTouching" -> {
                         notTouching()
-                        invalidate()
                         drawInstruction.command = "init"
-                        drawnInstruction!!.setValue(drawInstruction)
+                        drawnInstruction?.setValue(drawInstruction)
+                        invalidate()
                     }
                 }
             }
@@ -217,15 +217,12 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
             MotionEvent.ACTION_DOWN -> {
                 drawInstruction.command = "inputStart"
+                drawInstruction.colour = currentColour
+                drawInstruction.strokeWidth = strokeWidth
                 drawnInstruction!!.setValue(drawInstruction)
 
                 inputStart(x, y)
 
-////  PMD 03/08/19
-//                Log.d("PaintView-ontouch-X", "${event.getX()}")
-//                Log.d("PaintView-ontouch-Y", "${event.getY()}")
-//                Log.d("PaintView-ontouch-event", "${event}")
-//                updateSnapshot()
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
