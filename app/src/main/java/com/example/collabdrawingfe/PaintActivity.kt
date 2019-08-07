@@ -185,7 +185,7 @@ class PaintActivity : AppCompatActivity() {
                 return true
             }
             R.id.eraser -> {
-                paintView!!.eraser()
+                paintView!!.changeColour("white")
                 return true
             }
             R.id.brush -> {
@@ -193,19 +193,19 @@ class PaintActivity : AppCompatActivity() {
                 return true
             }
             R.id.red ->{
-                paintView!!.red()
+                paintView!!.changeColour("red")
                 return true
             }
             R.id.black ->{
-                paintView!!.black()
+                paintView!!.changeColour("black")
                 return true
             }
             R.id.blue ->{
-                paintView!!.blue()
+                paintView!!.changeColour("blue")
                 return true
             }
             R.id.green ->{
-                paintView!!.green()
+                paintView!!.changeColour("green")
                 return true
             }
 

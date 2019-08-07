@@ -100,6 +100,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                         drawnInstruction?.setValue(drawInstruction)
                         invalidate()
                     }
+                    "changeColour" -> {
+                        currentColour = value!!.colour!!
+                    }
                 }
             }
         })
@@ -248,6 +251,13 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         return true
     }
 
+    fun changeColour(colour: String) {
+        currentColour = Color.parseColor(colour)
+        drawInstruction.colour = currentColour
+        drawInstruction.command = "changeColour"
+        drawnInstruction!!.setValue(drawInstruction)
+    }
+
 //    private var bitmapBase64: String = ""
 
 //    private fun bitmapToString(bitmap: Bitmap):String {
@@ -292,6 +302,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 //                Log.d("PaintView", "Error adding to database: ", e)
 //            }
 //    }
+
 
 
 
