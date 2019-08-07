@@ -200,6 +200,7 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.green()
                 return true
             }
+
             R.id.bsSmall ->{
                 paintView!!.bsSmall()
                 return true
