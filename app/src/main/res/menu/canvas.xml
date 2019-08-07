@@ -31,23 +31,7 @@
                   android:title="White"/>
         </menu>
     </item>
-    <item android:id="@+id/background_colour"
-          android:title="Background Colour"
-          app:showAsAction="never">
-        <menu>
-            <item android:id="@+id/bgBlack"
-                  android:title="Black"/>
-            <item android:id="@+id/bgRed"
-                  android:title="Red"/>
-            <item android:id="@+id/bgBlue"
-                  android:title="Blue"/>
-            <item android:id="@+id/bgGreen"
-                  android:title="Green"/>
-            <item android:id="@+id/bgWhite"
-                  android:title="White"/>
-        </menu>
-    </item>
-    <item android:id="@+id/brush_size"
+      <item android:id="@+id/brush_size"
             android:title="Brush Size"
             app:showAsAction="never">
         <menu>
