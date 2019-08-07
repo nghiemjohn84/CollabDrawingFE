@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ShareActionProvider
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -163,11 +164,18 @@ class PaintActivity : AppCompatActivity() {
 //    }
 
 
+    private var shareActionProvider: ShareActionProvider? = null
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.canvas, menu)
+        menu.findItem(R.id.share).also { menuItem ->
+            shareActionProvider = menuItem.actionProvider as? ShareActionProvider
+        }
         return super.onCreateOptionsMenu(menu)
+    }
+    private fun setShareIntent(shareIntent: Intent) {
+        shareActionProvider?.setShareIntent(shareIntent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
