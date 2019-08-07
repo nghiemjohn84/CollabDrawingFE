@@ -17,7 +17,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ShareActionProvider
 import android.widget.Toast
+import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
@@ -178,9 +181,12 @@ class PaintActivity : AppCompatActivity() {
             progressDialog.show()
 
             val imageRef = storageReference!!.child("gallery/" + UUID.randomUUID().toString())
-            imageRef.putFile(filePath!!)
+            var uploadTask = imageRef.putFile(filePath!!)
+                    uploadTask
                 .addOnSuccessListener {
                     progressDialog.dismiss()
+                    val url = imageRef.downloadUrl
+                    Log.d("screenshot", "$url")
                     Toast.makeText(applicationContext, "file uploaded", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener {
@@ -191,6 +197,21 @@ class PaintActivity : AppCompatActivity() {
                     val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
                     progressDialog.setMessage("uploaded" + progress.toInt() + "%...")
                 }
+            val urlTask = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> {task ->
+                if(!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation imageRef.downloadUrl
+            }).addOnCompleteListener{ task ->
+                if(task.isSuccessful) {
+                    val downloadUri = task.result
+                    Log.d("screenshot", "$downloadUri")
+                } else {
+                    Toast.makeText(applicationContext, "URL failed", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
