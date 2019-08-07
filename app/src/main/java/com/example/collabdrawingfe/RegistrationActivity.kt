@@ -23,6 +23,9 @@ import java.util.*
 
 class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
 
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+
+
     private val PICK_IMAGE_REQUEST = 1234
 
     private fun showFileChooser() {
@@ -44,6 +47,7 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
             showFileChooser()
         else if (p0 === register_button_registration)
             uploadFile()
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,7 +61,6 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 val bitmapDrawable = BitmapDrawable(bitmap)
                 select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
-//                image_imageView!!.setImageBitmap(bitmap)
 
             } catch (e: IOException)
             {
@@ -90,13 +93,10 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
         }
+        registerUser()
 
     }
 
-//    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-//    private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +127,7 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
 //        }
     }
 
-    var selectedPhotoURI: Uri? = null
+//    var selectedPhotoURI: Uri? = null
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
@@ -213,7 +213,7 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
             if(task.isSuccessful) {
                     Log.d("LoginActivity", "Login successful")
                     Toast.makeText(this, "User logged in successfully", Toast.LENGTH_LONG).show()
-                    val intent = Intent(this, PaintActivity::class.java)
+                    val intent = Intent(this, GalleryActivity::class.java)
                     startActivity(intent)
                 }
                 else {
