@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="@+id/doodleName_editText"
             android:background="@drawable/rounded_button" android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/doodleName_editText"
-            android:textColor="@color/fui_bgGoogle"/>
+            android:textColor="@android:color/white"/>
     <TextView
             android:text="If the doodle does not exist then it will be created"
             android:layout_width="wrap_content"
@@ -33,5 +33,5 @@
             android:id="@+id/doodleInfo_textView" app:layout_constraintStart_toStartOf="@+id/joinDoodle_button"
             app:layout_constraintEnd_toEndOf="@+id/joinDoodle_button"
             app:layout_constraintTop_toBottomOf="@+id/joinDoodle_button" android:layout_marginTop="16dp"
-            android:textColor="@color/fui_bgGoogle" android:textStyle="bold"/>
+            android:textColor="#00F7F4F4" android:textStyle="bold"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
