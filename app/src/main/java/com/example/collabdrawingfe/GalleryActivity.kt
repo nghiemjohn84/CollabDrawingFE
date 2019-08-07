@@ -6,10 +6,10 @@ import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.content_gallery.*
 
@@ -18,6 +18,7 @@ class GalleryActivity : AppCompatActivity() {
     lateinit var imageRef : DatabaseReference
 
     val drawings = ArrayList<String>()
+    val mAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,13 @@ class GalleryActivity : AppCompatActivity() {
             startActivity(intentActivity)
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+        }
+        sign_out.setOnClickListener{
+            mAuth.signOut()
+            val intentActivity = Intent(this, LoginActivity::class.java)
+            startActivity(intentActivity)
+
+
         }
     }
 
