@@ -18,8 +18,7 @@
             android:theme="@style/AppTheme">
         <activity android:name=".FullScreenImageActivity">
         </activity>
-        <activity android:name=".propsTestActivity">
-        </activity>
+
         <activity
                 android:name=".chooseDoodleActivity"
                 android:theme="@style/NoMenuTheme">
@@ -48,11 +47,11 @@
         <activity
                 android:name=".RegistrationActivity"
                 android:theme="@style/NoMenuTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".PaintActivity">
 
