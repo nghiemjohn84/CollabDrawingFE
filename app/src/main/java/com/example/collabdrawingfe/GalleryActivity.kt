@@ -34,8 +34,6 @@ class GalleryActivity : AppCompatActivity() {
         newCanvas_button_gallery.setOnClickListener { view ->
             val intentActivity = Intent(this, chooseDoodleActivity::class.java)
             startActivity(intentActivity)
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
         }
         sign_out.setOnClickListener{
             mAuth.signOut()
@@ -51,7 +49,7 @@ class GalleryActivity : AppCompatActivity() {
         imageRef = FirebaseDatabase.getInstance().getReference("galleryURLs")
         imageRef.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                TODO("not implemented")
             }
 
             override fun onDataChange(p0: DataSnapshot) {
@@ -66,20 +64,6 @@ class GalleryActivity : AppCompatActivity() {
             }
         })
 
-
-//        val userRef =  dbFirestore.collection("testImages")
-//        userRef.get()
-//            .addOnSuccessListener { result ->
-//                for (document in result) {
-//                    var drawingURL = document.get("url")
-//                    drawings.add("$drawingURL")
-//                    image_list_gallery.layoutManager = LinearLayoutManager(this)
-//                    image_list_gallery.adapter = GalleryRecyclerAdapter(this, drawings)
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("gallery", "Error getting drawing URLs", exception)
-//            }
     }
 
 }
