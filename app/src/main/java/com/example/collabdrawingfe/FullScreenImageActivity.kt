@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_full_screen_image.*
 class FullScreenImageActivity : AppCompatActivity() {
 
 
+
     companion object {
         const val IMAGE_URL = "IMAGE_URL"
     }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".OnboardingActivity_One" android:orientation="vertical">
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="521dp" tools:srcCompat="@tools:sample/avatars" android:id="@+id/onboarding_imageview"
+            android:layout_weight="1"/>
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" android:paddingBottom="20dp"
+    >
+        <Button android:text="Skip"
+                android:id="@+id/button_skip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" android:background="@drawable/rounded_button"
+                android:textColor="@color/common_google_signin_btn_text_dark_default">
+        </Button>
+        <Button android:text="Next"
+                android:id="@+id/button_next"
+                android:layout_toRightOf="@id/button_skip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" android:background="@drawable/rounded_button"
+                android:textColor="@color/common_google_signin_btn_text_dark_default">
+        </Button>
+    </LinearLayout>
+</LinearLayout>

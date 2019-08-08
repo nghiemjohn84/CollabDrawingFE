@@ -125,7 +125,7 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
             if(task.isSuccessful) {
                     Log.d("LoginActivity", "Login successful")
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
-                    val intent = Intent(this, GalleryActivity::class.java)
+                    val intent = Intent(this, OnboardingActivity_One::class.java)
                     startActivity(intent)
                 }
                 else {
