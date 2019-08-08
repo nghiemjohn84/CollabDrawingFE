@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Handler
 import android.util.DisplayMetrics
@@ -15,17 +14,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ShareActionProvider
 import android.widget.Toast
 import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -210,18 +204,20 @@ class PaintActivity : AppCompatActivity() {
     }
 
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.clear -> {
-                paintView!!.clear()
+                paintView!!.clearCanvas()
                 return true
             }
             R.id.eraser -> {
                 paintView!!.changeColour("white")
+                paintView!!.changeStrokeWidth(40)
                 return true
             }
             R.id.brush -> {
-                paintView!!.brush()
+                paintView!!.changeColour("black")
+                paintView!!.changeStrokeWidth(5)
                 return true
             }
             R.id.red ->{
@@ -242,19 +238,19 @@ class PaintActivity : AppCompatActivity() {
             }
 
             R.id.bsSmall ->{
-                paintView!!.bsSmall()
+                paintView!!.changeStrokeWidth(10)
                 return true
             }
             R.id.bsMedium ->{
-                paintView!!.bsMedium()
+                paintView!!.changeStrokeWidth(20)
                 return true
             }
             R.id.bsLarge ->{
-                paintView!!.bsLarge()
+                paintView!!.changeStrokeWidth(40)
                 return true
             }
             R.id.bsChunky ->{
-                paintView!!.bsChunky()
+                paintView!!.changeStrokeWidth(80)
                 return true
             }
             R.id.invite -> {
