@@ -28,6 +28,7 @@ import java.io.FileOutputStream
 import java.lang.Exception
 import kotlin.random.Random
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.URI
 import java.util.*
 
 class PaintActivity : AppCompatActivity() {
@@ -48,17 +49,12 @@ class PaintActivity : AppCompatActivity() {
             if(!myDir.exists()) {
                 myDir.mkdirs()
             }
-            Log.d("screenshot", "$path")
-            Log.d("screenshot", "$myDir")
-
 
             val n = Random.nextInt(10000)
             val fileName = "image$n.jpg"
             fileNameForUpload = "image$n"
             val file = File(myDir, fileName)
             filePath = Uri.fromFile(file)
-            Log.d("screenshot", "$filePath")
-            Log.d("screenshot", "$file")
             if(file.exists())
                 file.delete()
             try {
@@ -78,21 +74,20 @@ class PaintActivity : AppCompatActivity() {
             val bit = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bit)
             v.layout(0, 0, v.layoutParams.width, v.layoutParams.height)
-
             v.draw(canvas)
-            Log.d("screenshot", "file created")
             return bit
         }
 
 
     private var paintView: PaintView? = null
 
-    // Database connection details
+
     private val dbFirebase = FirebaseDatabase.getInstance()
     private lateinit var doodle: DatabaseReference
     private var user: FirebaseUser? = null
     private lateinit var activeUsers: DatabaseReference
     private lateinit var key: DatabaseReference
+
 
     var width: Int = 700
     var height: Int = 1000
@@ -112,7 +107,6 @@ class PaintActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
 
-        // Doodling code 06/08/19
         doodle = dbFirebase.getReference(intent.getStringExtra(DOODLE_NAME))
         user = FirebaseAuth.getInstance().currentUser
         activeUsers = doodle.child("activeUsers")
@@ -120,6 +114,7 @@ class PaintActivity : AppCompatActivity() {
         key.setValue(user!!.displayName)
 
         paintView = findViewById(R.id.paintView) as PaintView
+
 
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
@@ -160,7 +155,6 @@ class PaintActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     val url = imageRef.downloadUrl
-                    Log.d("screenshot", "$url")
                     Toast.makeText(applicationContext, "file uploaded", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener {
@@ -181,10 +175,8 @@ class PaintActivity : AppCompatActivity() {
             }).addOnCompleteListener{ task ->
                 if(task.isSuccessful) {
                     val downloadUri = task.result
-                    Log.d("screenshot", "$downloadUri")
 
                     val galleryUriRef = FirebaseDatabase.getInstance().getReference("galleryURLs")
-//                    val urlId = fileNameForUpload
                     val urlId = galleryUriRef.push().key
 
                     galleryUriRef.child("$urlId").setValue(downloadUri.toString())
@@ -197,6 +189,7 @@ class PaintActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
