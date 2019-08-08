@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +35,7 @@ import java.util.*
 class PaintActivity : AppCompatActivity() {
 
     private var filePath: Uri? = null
+    private var fileNativeSharePath: Uri? = null
     private var fileNameForUpload: String? = null
 
     internal var storage : FirebaseStorage?= null
@@ -55,6 +57,7 @@ class PaintActivity : AppCompatActivity() {
             fileNameForUpload = "image$n"
             val file = File(myDir, fileName)
             filePath = Uri.fromFile(file)
+            fileNativeSharePath = FileProvider.getUriForFile(PaintActivity@this, BuildConfig.APPLICATION_ID + ".provider", file)
             if(file.exists())
                 file.delete()
             try {
@@ -273,6 +276,18 @@ class PaintActivity : AppCompatActivity() {
                     startActivity(activityIntent)
                 }, 2000)
 
+            }
+            R.id.share -> {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.type = "image/*"
+                shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                shareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                val bitmapToShare = loadScreenshot(findViewById(R.id.paintView), width, height)
+                saveScreenshot(bitmapToShare!!)
+                shareIntent.putExtra(Intent.EXTRA_STREAM, fileNativeSharePath)
+                startActivity(Intent.createChooser(shareIntent, "Share via"))
+                Log.d("PaintActivity", "Here")
             }
             }
 
