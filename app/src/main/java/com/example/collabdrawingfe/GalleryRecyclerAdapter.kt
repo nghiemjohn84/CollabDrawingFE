@@ -29,7 +29,8 @@ class GalleryRecyclerAdapter(private val context: Context, private val drawings:
         holder.drawingURL.setOnClickListener{
             val intent = Intent(context, FullScreenImageActivity::class.java)
                 intent.putExtra("IMAGE_URL", drawing)
-                context.startActivity(intent)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
         }
         holder.drawingPosition = position
     }

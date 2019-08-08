@@ -65,21 +65,6 @@ class GalleryActivity : AppCompatActivity() {
                 }
             }
         })
-
-
-//        val userRef =  dbFirestore.collection("testImages")
-//        userRef.get()
-//            .addOnSuccessListener { result ->
-//                for (document in result) {
-//                    var drawingURL = document.get("url")
-//                    drawings.add("$drawingURL")
-//                    image_list_gallery.layoutManager = LinearLayoutManager(this)
-//                    image_list_gallery.adapter = GalleryRecyclerAdapter(this, drawings)
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("gallery", "Error getting drawing URLs", exception)
-//            }
     }
 
 }
