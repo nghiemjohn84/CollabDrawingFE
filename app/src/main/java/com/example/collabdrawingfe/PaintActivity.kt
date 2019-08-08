@@ -314,8 +314,11 @@ class PaintActivity : AppCompatActivity() {
                 Handler().postDelayed({
                     uploadFile()
                 }, 1000)
+                Handler().postDelayed({
+                    val activityIntent = Intent(this, GalleryActivity::class.java)
+                    startActivity(activityIntent)
+                }, 2000)
 
-//
             }
             }
 
