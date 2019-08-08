@@ -45,8 +45,10 @@
     </item>
         <item android:title="Item" app:showAsAction="always|withText" android:icon="@drawable/ic_save_white_24dp"
           android:id="@+id/save"/>
-    <item android:title="Gallery" android:id="@+id/gallery" app:showAsAction="always|withText"
-          android:icon="@drawable/ic_photo_library_white_24dp"/>
+        <item android:title="Gallery" android:id="@+id/gallery" app:showAsAction="always|withText"
+              android:icon="@drawable/ic_photo_library_white_24dp"/>
+        <item android:title="Share" android:id="@+id/share" app:showAsAction="always|withText"
+              android:icon="@drawable/ic_share_white_24dp"/>
 
 
 </menu>

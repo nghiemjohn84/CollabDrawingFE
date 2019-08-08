@@ -1,5 +1,6 @@
 package com.example.collabdrawingfe
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -33,9 +35,11 @@ import java.util.*
 
 class PaintActivity : AppCompatActivity() {
 
-    private var filePath: Uri? = null
-    private var fileNameForUpload: String? = null
 
+    private var filePath: Uri? = null
+    private var fileNativeSharePath: Uri? = null
+    private var fileNameForUpload: String? = null
+    val PICK_CONTACT_REQUEST = 1
     internal var storage : FirebaseStorage?= null
     internal var storageReference:StorageReference?= null
 
@@ -55,6 +59,7 @@ class PaintActivity : AppCompatActivity() {
             fileNameForUpload = "image$n"
             val file = File(myDir, fileName)
             filePath = Uri.fromFile(file)
+            fileNativeSharePath = FileProvider.getUriForFile(PaintActivity@this, BuildConfig.APPLICATION_ID + ".provider", file)
             if(file.exists())
                 file.delete()
             try {
@@ -121,7 +126,28 @@ class PaintActivity : AppCompatActivity() {
         paintView!!.init(metrics, intent.getStringExtra(DOODLE_NAME))
 
         activeUsers.addValueEventListener(newUserEventListener)
+
+
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == PICK_CONTACT_REQUEST) {
+            if(resultCode == Activity.RESULT_OK) {
+                Log.d("result of onActivity", "**********SUCCESS!**********")
+            }
+            else {
+                Handler().postDelayed({
+                uploadFile()
+            }, 1000)
+                Handler().postDelayed({
+                    val activityIntent = Intent(this, GalleryActivity::class.java)
+                    startActivity(activityIntent)
+                }, 2000)
+
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 
     private val newUserEventListener = object : ValueEventListener {
         override fun onCancelled(error: DatabaseError) {
@@ -155,7 +181,7 @@ class PaintActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     val url = imageRef.downloadUrl
-                  
+
                     Log.d("screenshot", "$url")
                     Toast.makeText(applicationContext, "Image uploaded successfully!", Toast.LENGTH_SHORT).show()
 
@@ -208,6 +234,7 @@ class PaintActivity : AppCompatActivity() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         when (item.itemId) {
             R.id.clear -> {
                 paintView!!.clearCanvas()
@@ -274,7 +301,24 @@ class PaintActivity : AppCompatActivity() {
                 }, 2000)
 
             }
+            R.id.share -> {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.type = "image/*"
+                shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                shareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+
+
+                val bitmapToShare = loadScreenshot(findViewById(R.id.paintView), width, height)
+                saveScreenshot(bitmapToShare!!)
+
+
+                shareIntent.putExtra(Intent.EXTRA_STREAM, fileNativeSharePath)
+                startActivityForResult(Intent.createChooser(shareIntent, "Share via"), PICK_CONTACT_REQUEST)
             }
+        }
+
 
         return super.onOptionsItemSelected(item)
     }
