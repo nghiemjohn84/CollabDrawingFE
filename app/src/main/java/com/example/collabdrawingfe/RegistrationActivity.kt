@@ -117,31 +117,9 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
-
-//        select_photo_button_registration.setOnClickListener {
-//            Log.d("RegistrationActivity", "select photo button clicked")
-//
-//            val intent = Intent(Intent.ACTION_PICK)
-//            intent.type = "image/*"
-//            startActivityForResult(intent, 0)
-//        }
     }
 
-//    var selectedPhotoURI: Uri? = null
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-//            //check what the image was....
-//            Log.d("RegistrationActivity", "Photo was selected")
-//
-//            selectedPhotoURI = data.data
-//            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoURI)
-//            val bitmapDrawable = BitmapDrawable(bitmap)
-//            select_photo_button_registration.setBackgroundDrawable(bitmapDrawable)
-//        }
-//    }
 
     private fun registerUser() {
         val userName = username_editText_registration.text.toString()
@@ -156,19 +134,6 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("RegistrationActivity", "Email is: $email")
         Log.d("RegistrationActivity", "Password is: $password")
 
-//        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-//            if (task.isSuccessful) {
-//                Log.d("RegisterUser", "Successfully created user with uid ${task.result?.user?.uid}")
-////                    insertUser(email, userName, it.result?.user?.uid!!)
-//                var userId = mAuth!!.currentUser!!.uid
-//                task.result?.user?.displayName
-////                    clearInputs()
-//            } else {
-//                Log.e("RegisterUser", "Failed")
-//
-//                Toast.makeText(this, "User Registration has failed", Toast.LENGTH_LONG).show()
-//            }
-//        }
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this)
         { task ->
@@ -184,21 +149,6 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
 
         signIn(email, password)
     }
-//        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-//            when {
-//                it.isSuccessful -> {
-//                    Toast.makeText(this, "User Registered", Toast.LENGTH_LONG).show()
-//                    Log.d("RegisterUser", "Successfully created user with uid ${it.result?.user?.uid}")
-////                    insertUser(email, userName, it.result?.user?.uid!!)
-//                    clearInputs()
-//                }
-//                else -> {
-//                    Toast.makeText(this, "User Registration has failed", Toast.LENGTH_LONG).show()
-//                    return@addOnCompleteListener
-//                }
-//            }
-//
-//        }
 
 
 
@@ -232,27 +182,6 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
         username_editText_registration.text.clear()
     }
 }
-//    private fun insertUser(email: String, username: String, uid: String) {
-//        val userRef = dbFirestore.collection("users")
-//
-//        Log.d("RegistrationActivity", userRef.toString())
-//
-//        val user = hashMapOf<String, Any?>(
-//            "email" to email,
-//            "username" to username,
-//            "uid" to uid
-//        )
-//
-//        userRef.add(user)
-//            .addOnSuccessListener { documentReference ->
-//                Toast.makeText(this, "User created in database", Toast.LENGTH_SHORT).show()
-//                Log.d("RegistrationActivity", "user created in database")
-//            }
-//            .addOnFailureListener { e ->
-//                Log.d("RegistrationActivity", "Error adding document to database")
-//            }
-//
-//    }
 
 
 
