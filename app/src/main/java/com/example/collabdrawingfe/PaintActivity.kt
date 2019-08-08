@@ -108,11 +108,21 @@ class PaintActivity : AppCompatActivity() {
     // var activeUsers = ArrayList<Map<Any, String>>()
     // var fields = ArrayList<String>()
 
-
+//    val displayMetrics = DisplayMetrics()
+    var width: Int = 700
+    var height: Int = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        width = displayMetrics.widthPixels
+        height = displayMetrics.heightPixels
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
@@ -297,7 +307,7 @@ class PaintActivity : AppCompatActivity() {
 
             }
             R.id.save -> {
-                val bitmap = loadScreenshot(findViewById(R.id.paintView), 700, 1000)
+                val bitmap = loadScreenshot(findViewById(R.id.paintView), width, height)
                 saveScreenshot(bitmap!!)
                 Handler().postDelayed({
                     uploadFile()
