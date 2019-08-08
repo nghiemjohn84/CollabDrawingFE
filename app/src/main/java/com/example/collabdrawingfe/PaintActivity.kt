@@ -249,18 +249,20 @@ class PaintActivity : AppCompatActivity() {
     }
 
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.clear -> {
-                paintView!!.clear()
+                paintView!!.clearCanvas()
                 return true
             }
             R.id.eraser -> {
                 paintView!!.changeColour("white")
+                paintView!!.changeStrokeWidth(40)
                 return true
             }
             R.id.brush -> {
-                paintView!!.brush()
+                paintView!!.changeColour("black")
+                paintView!!.changeStrokeWidth(5)
                 return true
             }
             R.id.red ->{
@@ -281,19 +283,19 @@ class PaintActivity : AppCompatActivity() {
             }
 
             R.id.bsSmall ->{
-                paintView!!.bsSmall()
+                paintView!!.changeStrokeWidth(10)
                 return true
             }
             R.id.bsMedium ->{
-                paintView!!.bsMedium()
+                paintView!!.changeStrokeWidth(20)
                 return true
             }
             R.id.bsLarge ->{
-                paintView!!.bsLarge()
+                paintView!!.changeStrokeWidth(40)
                 return true
             }
             R.id.bsChunky ->{
-                paintView!!.bsChunky()
+                paintView!!.changeStrokeWidth(80)
                 return true
             }
             R.id.invite -> {
