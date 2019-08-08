@@ -12,12 +12,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.content_gallery.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GalleryActivity : AppCompatActivity() {
 
     lateinit var imageRef : DatabaseReference
 
     val drawings = ArrayList<String>()
+    val reversedDrawings = drawings.asReversed()
     val mAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +57,7 @@ class GalleryActivity : AppCompatActivity() {
                         drawings.add("${drawing.value}")
                     }
                     image_list_gallery.layoutManager = LinearLayoutManager(applicationContext)
-                    image_list_gallery.adapter = GalleryRecyclerAdapter(applicationContext, drawings)
-                    Log.d("images", "$drawings")
+                    image_list_gallery.adapter = GalleryRecyclerAdapter(applicationContext, reversedDrawings)
 
                 }
             }
