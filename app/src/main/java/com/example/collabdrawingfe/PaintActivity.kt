@@ -256,10 +256,6 @@ class PaintActivity : AppCompatActivity() {
                 paintView!!.changeStrokeWidth(80)
                 return true
             }
-            R.id.invite -> {
-                val activityIntent = Intent(this, InviteCollaboratorActivity::class.java)
-                startActivity(activityIntent)
-            }
 
             R.id.gallery -> {
                 val activityIntent = Intent(this, GalleryActivity::class.java)
