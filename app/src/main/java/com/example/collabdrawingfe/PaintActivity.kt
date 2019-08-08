@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Handler
 import android.util.DisplayMetrics
@@ -15,17 +14,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ShareActionProvider
 import android.widget.Toast
 import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -89,7 +83,7 @@ class PaintActivity : AppCompatActivity() {
             Log.d("screenshot", "file created")
             return bit
         }
-    //}
+
 
     private var paintView: PaintView? = null
 
@@ -100,15 +94,6 @@ class PaintActivity : AppCompatActivity() {
     private lateinit var activeUsers: DatabaseReference
     private lateinit var key: DatabaseReference
 
-    // private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    // private var doodlesCollection = dbFirestore.collection("doodles")
-    // private var user: FirebaseUser? = null
-    // private var activeUsers = dbFirestore.collection("doodles")
-    // private var key = dbFirestore.collection("doodles")
-    // var activeUsers = ArrayList<Map<Any, String>>()
-    // var fields = ArrayList<String>()
-
-//    val displayMetrics = DisplayMetrics()
     var width: Int = 700
     var height: Int = 1000
 
@@ -135,29 +120,6 @@ class PaintActivity : AppCompatActivity() {
         key.setValue(user!!.displayName)
 
         paintView = findViewById(R.id.paintView) as PaintView
-
-
-//        val doodleRef = doodlesCollection.document(intent.getStringExtra(DOODLE_NAME))
-//        doodleRef.get()
-//            .addOnCompleteListener(OnCompleteListener<DocumentSnapshot> {
-//                if(it.isSuccessful) {
-//                    val list = ArrayList<String>()
-//                    val map = it.result!!.data
-//                    for((key) in map!!) {
-//                        list.add(key)
-//                        Log.d("PaintActivity", key)
-//                    }
-//                    Log.d("PaintActivity", "${map.entries}")
-//                    for(entry in map.entries) {
-//                        Log.d("PaintActivity", "${entry.value}")
-//                        var entrydetails = entry.value
-//                        Log.d("PaintActivity", "Here")
-//                    }
-//                }
-//            })
-
-
-
 
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)

@@ -7,14 +7,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.*
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.justinnguyenme.base64image.Base64Image
-import java.io.ByteArrayOutputStream
-import java.io.OutputStream
 import java.util.*
 
 
@@ -54,8 +47,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         mCanvas = Canvas(mBitmap!!)
-
-        Log.d("PaintView-mCanvas-init", mCanvas.toString())
 
         currentColour = DEFAULT_COLOUR
         strokeWidth = BRUSH_SIZE
@@ -110,57 +101,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             }
         })
     }
-
-
-    fun clear() {
-        paths.clear()
-        invalidate()
-
-    }
-
-    fun eraser() {
-        previousColour = currentColour
-        currentColour = backgroundColour
-    }
-
-
-    fun brush() {
-        currentColour = previousColour
-    }
-
-    //Brush Colours:
-    fun red() {
-        currentColour = Color.RED
-    }
-    fun black() {
-        currentColour = Color.BLACK
-    }
-    fun blue() {
-        currentColour = Color.BLUE
-    }
-    fun green() {
-        currentColour = Color.GREEN
-    }
-
-    //Brush Sizes
-
-    fun bsSmall(){
-        strokeWidth = 5
-
-    }
-    fun bsMedium(){
-        strokeWidth = 20
-    }
-    fun bsLarge(){
-        strokeWidth = 40
-
-    }
-    fun bsChunky(){
-        strokeWidth = 80
-
-
-    }
-
 
     // Drawing functions
 
