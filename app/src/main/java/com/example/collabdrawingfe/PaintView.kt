@@ -33,7 +33,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var mCanvas: Canvas? = null
     private val mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
-//    private val dbFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val dbFirebase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private var drawnInstruction: DatabaseReference? = null
     val drawInstruction: DrawInstruction = DrawInstruction()
@@ -48,9 +47,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPaint.strokeCap = Paint.Cap.ROUND
         mPaint.alpha = 255
     }
-
- //   private val instructionsRef = dbFirestore.collection("instructions")
-
 
     fun init(metrics: DisplayMetrics, doodle: String) {
         val height = metrics.heightPixels
@@ -103,11 +99,16 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                     "changeColour" -> {
                         currentColour = value!!.colour!!
                     }
+                    "changeStrokeWidth" -> {
+                        strokeWidth = value!!.strokeWidth!!
+                    }
+                    "clearCanvas" -> {
+                        paths.clear()
+                        invalidate()
+                    }
                 }
             }
         })
-//        writeToFirestore()
-//        createSnapshot()
     }
 
 
@@ -174,7 +175,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         }
 
         canvas.drawBitmap(mBitmap!!, 0f, 0f, mBitmapPaint)
-
         canvas.restore()
 
     }
@@ -189,9 +189,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPath!!.moveTo(x, y)
         mX = x
         mY = y
-
-//        setupSnapShot()
-//        listenToDocumentLocal()
     }
 
     private fun touching(x: Float, y: Float) {
@@ -225,7 +222,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 drawnInstruction!!.setValue(drawInstruction)
 
                 inputStart(x, y)
-
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
@@ -239,8 +235,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 drawInstruction.command = "notTouching"
                 drawnInstruction!!.setValue(drawInstruction)
                 notTouching()
-//                bitmapToString(mBitmap!!)
-//                writeToFirestore()
+
                 invalidate()
                 drawInstruction.command = "init"
                 drawnInstruction!!.setValue(drawInstruction)
@@ -258,53 +253,16 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         drawnInstruction!!.setValue(drawInstruction)
     }
 
-//    private var bitmapBase64: String = ""
+    fun changeStrokeWidth(stroke: Int) {
+        drawInstruction.strokeWidth = stroke
+        drawInstruction.command = "changeStrokeWidth"
+        drawnInstruction!!.setValue(drawInstruction)
+    }
 
-//    private fun bitmapToString(bitmap: Bitmap):String {
-//
-//        Base64Image.instance.encode(bitmap) { base64 ->
-////            bitmapBase64 = base64!! }
-//            base64?.let {
-//               bitmapBase64 = base64          }
-////                Log.d(TAG, "${base64}")
-//        }
-//        return bitmapBase64
-//    }
-//
-//    private fun writeToFirestore() {
-//
-//        val pathdetails = hashMapOf<String, Any>(
-//            "bitmap" to bitmapBase64
-//        )
-//
-//
-//        val canvasRef = dbFirestore.collection("canvii").document(mCanvas.toString())
-//        canvasRef
-////        canvasRef.collection(mPath.toString())
-////            .add(pathdetails)
-//            .set(pathdetails)
-//            .addOnSuccessListener { documentReference ->
-//                Log.d("PaintView - onSuccess", "Database Updated: ${mPath.toString()} ${documentReference}")
-//            }
-//            .addOnFailureListener { e ->
-//                Log.d("PaintView", "Error adding to database: ", e)
-//            }
-
-
-//        val canvasRef = dbFirestore.collection(mCanvas.toString())
-//        canvasRef.document(mPath.toString())
-//            .collection(mPath.toString())
-//            .add(pathdetails)
-//            .addOnSuccessListener { documentReference ->
-//                Log.d("PaintView - onSuccess", "Database Updated: ${mPath.toString()} ${documentReference}")
-//            }
-//            .addOnFailureListener { e ->
-//                Log.d("PaintView", "Error adding to database: ", e)
-//            }
-//    }
-
-
-
+    fun clearCanvas(){
+        drawInstruction.command = "clearCanvas"
+        drawnInstruction!!.setValue(drawInstruction)
+    }
 
     companion object {
 
