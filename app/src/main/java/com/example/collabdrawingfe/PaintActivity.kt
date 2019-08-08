@@ -155,15 +155,18 @@ class PaintActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     val url = imageRef.downloadUrl
-                    Toast.makeText(applicationContext, "file uploaded", Toast.LENGTH_SHORT).show()
+                  
+                    Log.d("screenshot", "$url")
+                    Toast.makeText(applicationContext, "Image uploaded successfully!", Toast.LENGTH_SHORT).show()
+
                 }
                 .addOnFailureListener {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "file failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Upload failed", Toast.LENGTH_SHORT).show()
                 }
                 .addOnProgressListener { taskSnapshot ->
                     val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
-                    progressDialog.setMessage("uploaded" + progress.toInt() + "%...")
+                    progressDialog.setMessage("Uploading image " + progress.toInt() + "%...")
                 }
             val urlTask = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> {task ->
                 if(!task.isSuccessful) {
