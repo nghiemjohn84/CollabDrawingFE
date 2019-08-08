@@ -3,6 +3,8 @@ package com.example.collabdrawingfe
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +45,7 @@ class GalleryActivity : AppCompatActivity() {
 
         }
     }
+
 
     private fun fetchAllImages() {
         imageRef = FirebaseDatabase.getInstance().getReference("galleryURLs")
