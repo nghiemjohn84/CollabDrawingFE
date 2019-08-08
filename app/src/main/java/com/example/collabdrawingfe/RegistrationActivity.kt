@@ -162,13 +162,13 @@ class RegistrationActivity : AppCompatActivity(), View.OnClickListener {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if(task.isSuccessful) {
                     Log.d("LoginActivity", "Login successful")
-                    Toast.makeText(this, "User logged in successfully", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
                     val intent = Intent(this, GalleryActivity::class.java)
                     startActivity(intent)
                 }
                 else {
                     Log.d("LoginActivity", "Login unsuccessful boyyyyyy :(")
-                    Toast.makeText(this, "Login failed boyyyyyyyyyyy! :(", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Login unsuccessful, please try again", Toast.LENGTH_LONG).show()
                 }
             }
 
