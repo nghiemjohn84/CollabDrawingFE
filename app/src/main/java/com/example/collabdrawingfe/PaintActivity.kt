@@ -134,7 +134,16 @@ class PaintActivity : AppCompatActivity() {
             if(resultCode == Activity.RESULT_OK) {
                 Log.d("result of onActivity", "**********SUCCESS!**********")
             }
-            else {Log.d("result of onActivity", "**********FAILURE***********")}
+            else {
+                Handler().postDelayed({
+                uploadFile()
+            }, 1000)
+                Handler().postDelayed({
+                    val activityIntent = Intent(this, GalleryActivity::class.java)
+                    startActivity(activityIntent)
+                }, 2000)
+
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
