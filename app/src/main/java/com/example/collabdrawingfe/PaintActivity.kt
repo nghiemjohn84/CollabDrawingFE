@@ -3,6 +3,7 @@ package com.example.collabdrawingfe
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
@@ -129,23 +130,36 @@ class PaintActivity : AppCompatActivity() {
 
 
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == PICK_CONTACT_REQUEST) {
-            if(resultCode == Activity.RESULT_OK) {
-                Log.d("result of onActivity", "**********SUCCESS!**********")
-            }
-            else {
-                Handler().postDelayed({
-                uploadFile()
-            }, 1000)
-                Handler().postDelayed({
-                    val activityIntent = Intent(this, GalleryActivity::class.java)
-                    startActivity(activityIntent)
-                }, 2000)
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if(requestCode == PICK_CONTACT_REQUEST) {
+//            if(resultCode == Activity.RESULT_OK) {
+//                Log.d("result of onActivity", "**********SUCCESS!**********")
+//            }
+//            else {
+//                Handler().postDelayed({
+//                uploadFile()
+//            }, 1000)
+//                Handler().postDelayed({
+//                    val activityIntent = Intent(this, GalleryActivity::class.java)
+//                    startActivity(activityIntent)
+//                }, 2000)
+//
+//            }
+//        }
+//        super.onActivityResult(requestCode, resultCode, data)
+//    }
 
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onRestart() {
+        super.onRestart()
+
+        Handler().postDelayed({
+            uploadFile()
+        }, 1000)
+        Handler().postDelayed({
+            val activityIntent = Intent(this, GalleryActivity::class.java)
+            startActivity(activityIntent)
+        }, 2000)
+
     }
 
 
@@ -315,7 +329,17 @@ class PaintActivity : AppCompatActivity() {
 
 
                 shareIntent.putExtra(Intent.EXTRA_STREAM, fileNativeSharePath)
-                startActivityForResult(Intent.createChooser(shareIntent, "Share via"), PICK_CONTACT_REQUEST)
+//                startActivity(Intent.createChooser(shareIntent, "Share via"), PICK_CONTACT_REQUEST)
+                startActivity(Intent.createChooser(shareIntent, "Share via"))
+
+//                Handler().postDelayed({
+//                    uploadFile()
+//                }, 1000)
+//                Handler().postDelayed({
+//                    val activityIntent = Intent(this, GalleryActivity::class.java)
+//                    startActivity(activityIntent)
+//                }, 2000)
+
             }
         }
 
